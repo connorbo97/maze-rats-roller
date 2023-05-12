@@ -1,12 +1,13 @@
 import "./app.module.scss";
 import styles from "./app.module.scss";
 import { Table } from "./components/Table";
-import { TABLES, TABLE_CONFIGS, TABLE_NAMES } from "./constants/tables";
-import { getTableLabel } from "./constants/tableLabels";
+import { TABLES, TABLE_NAMES } from "./constants/tables";
+import { getTableLabel } from "./constants/tables";
 
 import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
+import { generateCharacterText } from "./descriptionUtils";
 
 const App = () => {
   const { updateRollAll, tables, tablesSet, result, updateTables } = useRedux();
@@ -17,6 +18,12 @@ const App = () => {
   const onAddTable = (e) => {
     if (e.target.value) {
       updateTables([e.target.value, ...tables]);
+    }
+  };
+  const onAddPreset = (e) => {
+    if (e.target.value) {
+      updateTables([...PRESETS[e.target.value], ...tables]);
+      e.target.value = "";
     }
   };
 
@@ -34,18 +41,28 @@ const App = () => {
               </option>
             ))}
           </select>
+          <select onChange={onAddPreset}>
+            <option value="">Add a preset</option>
+            {Object.keys(PRESETS)
+              .filter((v) => v)
+              .map((preset) => (
+                <option key={preset} value={preset}>
+                  {PRESET_LABELS[preset] || preset}
+                </option>
+              ))}
+          </select>
           <select onChange={onAddTable}>
             <option value="">Add a table</option>
-            {Object.entries(TABLES)
+            {Object.keys(TABLE_NAMES)
               .filter(
-                ([k, table]) =>
+                (table) =>
                   !tablesSet.has(table) &&
                   getTableLabel(table)
                     .toLowerCase()
                     .indexOf(tableFilter.toLowerCase()) !== -1
               )
-              .map(([k, table]) => (
-                <option key={k} value={k}>
+              .map((table) => (
+                <option key={table} value={table}>
                   {getTableLabel(table)}
                 </option>
               ))}
@@ -60,14 +77,14 @@ const App = () => {
           {Object.keys(result)
             .map(
               (k) =>
-                TABLE_CONFIGS[k]?.getResultText &&
-                TABLE_CONFIGS[k]?.getResultText(result)
+                TABLES[k]?.getResultText && TABLES[k]?.getResultText(result)
             )
             .filter((v) => v)}
+          {generateCharacterText(result)}
         </div>
         <div className={styles["tables"]}>
           {tables.map((t) => (
-            <Table table={TABLES[t]} tableName={t} key={t} />
+            <Table table={TABLES[t].table} tableName={t} key={t} />
           ))}
           {!tables?.length && (
             <div className={styles["help-text"]}>

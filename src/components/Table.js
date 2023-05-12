@@ -8,8 +8,7 @@ import React, {
 import styles from "./table.module.scss";
 import { useRedux } from "../redux";
 import classnames from "classnames/bind";
-import { getTableLabel } from "../constants/tableLabels";
-import { TABLE_CONFIGS } from "../constants/tables";
+import { TABLES, getTableLabel } from "../constants/tables";
 
 const classNameBuilder = classnames.bind(styles);
 
@@ -34,21 +33,29 @@ export const Table = ({ table, tableName }) => {
     return twoDTable;
   }, [table]);
 
+  const updateRolls = useCallback(
+    (newRollGroup, newRollValue) => {
+      setRollGroup(newRollGroup);
+      setRollValue(newRollValue);
+      let value = Object.values(table)[newRollGroup][newRollValue];
+
+      if (TABLES[tableName]?.calculateValue) {
+        value = TABLES[tableName].calculateValue(value);
+      }
+
+      updateResultByKey(tableName, value);
+    },
+    [table, tableName, updateResultByKey]
+  );
+
   const onRoll = useCallback(() => {
     const newRollGroup = Math.floor(Math.random() * Object.keys(table).length);
     const newRollValue = Math.floor(
       Math.random() * table[Object.keys(table)[newRollGroup]].length
     );
-    setRollGroup(newRollGroup);
-    setRollValue(newRollValue);
-    let value = Object.values(table)[newRollGroup][newRollValue];
 
-    if (TABLE_CONFIGS[tableName]?.calculateValue) {
-      value = TABLE_CONFIGS[tableName].calculateValue(value);
-    }
-
-    updateResultByKey(tableName, value);
-  }, [table, tableName, updateResultByKey]);
+    updateRolls(newRollGroup, newRollValue);
+  }, [table, updateRolls]);
 
   const onDelete = () => {
     updateTables(tables.filter((t) => t !== tableName));
@@ -63,7 +70,7 @@ export const Table = ({ table, tableName }) => {
   return (
     <div className={styles["container"]}>
       <div className={styles["head"]}>
-        <b>{getTableLabel(table)}</b>
+        <b>{getTableLabel(tableName)}</b>
         <button onClick={onRoll}>Roll</button>
         <button onClick={onDelete}>Delete</button>
       </div>
@@ -91,6 +98,9 @@ export const Table = ({ table, tableName }) => {
                       selected: rollValue === rowI && rollGroup === valI,
                       "selected-group": rollGroup === valI,
                     })}
+                    onClick={() => {
+                      updateRolls(valI, rowI);
+                    }}
                   >
                     {val}
                   </td>
