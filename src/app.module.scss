@@ -1,0 +1,48 @@
+@import 'colors';
+
+.app {
+  min-width: 100%;
+  min-height: 100%;
+
+  background-color: $bg;
+  color: $text;
+}
+
+.content {
+  padding: 10px;
+  display: grid;
+
+  row-gap: 10px; 
+
+  justify-content: center;
+
+  > h1 {
+    margin: 0;
+    text-align: center;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  > button {
+    padding: 30px;
+    min-width: 200px;
+    background-color: #d7bba8;
+    color: $ctext;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 5px 5px 1px 0px black;
+  }
+}
+
+.help-text {
+  text-align: center;
+}
+
+.tables {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}

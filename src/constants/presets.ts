@@ -1,0 +1,21 @@
+import { TABLE_NAMES } from "./tables";
+
+export const PRESETS = {
+  "": [],
+  CHARACTER: [],
+  MAGIC: [
+    TABLE_NAMES.MAGIC_TABLE_ROLL,
+    TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS,
+    TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS,
+    TABLE_NAMES.MAGIC_PHYSICAL_FORMS,
+    TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS,
+    TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS,
+    TABLE_NAMES.MAGIC_ETHEREAL_FORMS,
+  ],
+};
+
+export const PRESET_LABELS = {
+  "": "Choose a preset",
+  MAGIC: "Magic Spells",
+  CHARACTER: "Character Traits & Personality",
+};
