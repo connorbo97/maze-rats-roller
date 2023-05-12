@@ -42,13 +42,20 @@
 }
 
 .tables {
-  display: flex;
-  flex-direction: row;
-  row-gap: 10px;
+  // display: flex;
+  // flex-direction: row;
+  // row-gap: 10px;
+  // column-gap: 20px;
+  // flex-wrap: wrap;
+  // justify-content: center;
+  // align-items: flex-start;
+
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr 1fr;
+
   column-gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
+  row-gap: 20px;
 }
 .result {
   display: flex;

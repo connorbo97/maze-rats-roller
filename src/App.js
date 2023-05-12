@@ -7,7 +7,11 @@ import { getTableLabel } from "./constants/tables";
 import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
-import { generateCharacterText, generateMonsterText } from "./descriptionUtils";
+import {
+  generateCharacterText,
+  generateMonsterText,
+  generateNPCText,
+} from "./descriptionUtils";
 
 const App = () => {
   const { updateRollAll, tables, tablesSet, result, updateTables } = useRedux();
@@ -27,6 +31,7 @@ const App = () => {
       e.target.value = "";
     }
   };
+  console.log(tables);
 
   return (
     <div className={styles["app"]}>
@@ -83,15 +88,19 @@ const App = () => {
             .filter((v) => v)}
           {generateCharacterText(result)}
           {generateMonsterText(result)}
+          {generateNPCText(result)}
         </div>
+        {!tables?.length && (
+          <div className={styles["help-text"]}>
+            Add a table or select a preset
+          </div>
+        )}
         <div className={styles["tables"]}>
-          {tables.map((t) => (
-            <Table table={TABLES[t].table} tableName={t} key={t} />
-          ))}
-          {!tables?.length && (
-            <div className={styles["help-text"]}>
-              Add a table or select a preset
-            </div>
+          {tables.map(
+            (t) =>
+              console.log(t, TABLES, TABLES[t]) || (
+                <Table table={TABLES[t].table} tableName={t} key={t} />
+              )
           )}
         </div>
       </div>

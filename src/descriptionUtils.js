@@ -1,8 +1,26 @@
-import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLE_NAMES } from "./constants";
+import {
+  CHARACTER_PROPERTY_TO_FLAVOR_TEXT,
+  TABLES,
+  TABLE_NAMES,
+} from "./constants";
+import { PRESETS } from "./constants/presets";
 import styles from "./descriptionUtils.module.scss";
 
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
+
+const Tag = ({ val, label }) => {
+  if (!val) {
+    return null;
+  }
+
+  return (
+    <span>
+      <b>{label}: </b>
+      {val}
+    </span>
+  );
+};
 
 export const generateCharacterText = (result) => {
   if (Object.keys(result).every((k) => k.indexOf("CHARACTER_") === -1)) {
@@ -133,22 +151,11 @@ export const generateMonsterText = (result) => {
     weakness = result[TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS] || weakness;
   }
 
-  const Tag = ({ val, label }) => {
-    if (!val) {
-      return null;
-    }
-
-    return (
-      <span>
-        <b>{label}: </b>
-        {val}
-      </span>
-    );
-  };
-
   return (
     <span className={styles["monster"]}>
-      <b>Monster: </b>
+      <b>
+        <u>Monster</u>
+      </b>
       <br />
       <Tag label="Species" val={species} />
       <Tag label="Features" val={featuresText} />
@@ -157,6 +164,28 @@ export const generateMonsterText = (result) => {
       <Tag label="Tactics" val={tactics} />
       <Tag label="Personality" val={personality} />
       <Tag label="Weakness" val={weakness} />
+    </span>
+  );
+};
+
+export const generateNPCText = (result) => {
+  const tables = PRESETS.NPC;
+  if (Object.keys(result).every((k) => k.indexOf("NPC_") === -1)) {
+    return null;
+  }
+
+  return (
+    <span className={styles["monster"]}>
+      <b>
+        <u>NPC</u>
+      </b>
+      <br />
+      {tables.map((t) => (
+        <Tag
+          label={TABLES[t].label.split("NPC: ")[1]}
+          val={CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[t]] || result[t]}
+        />
+      ))}
     </span>
   );
 };
