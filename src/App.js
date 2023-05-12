@@ -7,13 +7,14 @@ import { getTableLabel } from "./constants/tables";
 import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
-import { generateCharacterText } from "./descriptionUtils";
+import { generateCharacterText, generateMonsterText } from "./descriptionUtils";
 
 const App = () => {
   const { updateRollAll, tables, tablesSet, result, updateTables } = useRedux();
   const [tableFilter, setTableFilter] = useState("");
   const onChangePreset = (e) => {
     updateTables(PRESETS[e.target.value]);
+    e.target.value = "";
   };
   const onAddTable = (e) => {
     if (e.target.value) {
@@ -81,6 +82,7 @@ const App = () => {
             )
             .filter((v) => v)}
           {generateCharacterText(result)}
+          {generateMonsterText(result)}
         </div>
         <div className={styles["tables"]}>
           {tables.map((t) => (

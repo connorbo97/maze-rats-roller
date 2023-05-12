@@ -26,7 +26,7 @@
 .table {
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
+    // table-layout: fixed;
     td, th {
         border: 1px solid white;
         padding: 5px;
@@ -51,4 +51,8 @@
     }
     
 
+}
+
+.locked.locked.locked {
+    background-color: gray;
 }

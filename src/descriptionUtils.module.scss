@@ -1,0 +1,10 @@
+.monster {
+    display: flex;
+    column-gap: 5px;
+    justify-content: space-between;
+    > span {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

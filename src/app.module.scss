@@ -43,8 +43,12 @@
 
 .tables {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   row-gap: 10px;
+  column-gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
 }
 .result {
   display: flex;

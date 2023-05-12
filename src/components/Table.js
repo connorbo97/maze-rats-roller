@@ -15,6 +15,7 @@ const classNameBuilder = classnames.bind(styles);
 export const Table = ({ table, tableName }) => {
   const { rollAll, updateResultByKey, updateTables, tables } = useRedux();
   const initialRollAll = useRef(rollAll);
+  const [lock, setLock] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
   const [rollValue, setRollValue] = useState(null);
 
@@ -49,13 +50,16 @@ export const Table = ({ table, tableName }) => {
   );
 
   const onRoll = useCallback(() => {
+    if (lock) {
+      return;
+    }
     const newRollGroup = Math.floor(Math.random() * Object.keys(table).length);
     const newRollValue = Math.floor(
       Math.random() * table[Object.keys(table)[newRollGroup]].length
     );
 
     updateRolls(newRollGroup, newRollValue);
-  }, [table, updateRolls]);
+  }, [lock, table, updateRolls]);
 
   const onDelete = () => {
     updateTables(tables.filter((t) => t !== tableName));
@@ -73,6 +77,12 @@ export const Table = ({ table, tableName }) => {
         <b>{getTableLabel(tableName)}</b>
         <button onClick={onRoll}>Roll</button>
         <button onClick={onDelete}>Delete</button>
+        <button
+          onClick={() => setLock((l) => !l)}
+          className={classNameBuilder({ locked: lock })}
+        >
+          {lock ? "Unlock" : "Lock"}
+        </button>
       </div>
       <table className={styles["table"]}>
         <thead>
