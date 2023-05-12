@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/maze-rats-roller/static/css/main.cc3430cf.css",
-    "main.js": "/maze-rats-roller/static/js/main.283f9d4f.js",
+    "main.css": "/maze-rats-roller/static/css/main.a1dce82c.css",
+    "main.js": "/maze-rats-roller/static/js/main.5a2859fa.js",
     "index.html": "/maze-rats-roller/index.html",
-    "main.cc3430cf.css.map": "/maze-rats-roller/static/css/main.cc3430cf.css.map",
-    "main.283f9d4f.js.map": "/maze-rats-roller/static/js/main.283f9d4f.js.map"
+    "main.a1dce82c.css.map": "/maze-rats-roller/static/css/main.a1dce82c.css.map",
+    "main.5a2859fa.js.map": "/maze-rats-roller/static/js/main.5a2859fa.js.map"
   },
   "entrypoints": [
-    "static/css/main.cc3430cf.css",
-    "static/js/main.283f9d4f.js"
+    "static/css/main.a1dce82c.css",
+    "static/js/main.5a2859fa.js"
   ]
 }
