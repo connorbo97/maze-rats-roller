@@ -9,6 +9,7 @@ import { useRedux } from "./redux";
 import { useState } from "react";
 import {
   generateCharacterText,
+  generateMagicText,
   generateMonsterText,
   generateNPCText,
 } from "./descriptionUtils";
@@ -80,12 +81,7 @@ const App = () => {
           />
         </div>
         <div className={styles["result"]}>
-          {Object.keys(result)
-            .map(
-              (k) =>
-                TABLES[k]?.getResultText && TABLES[k]?.getResultText(result)
-            )
-            .filter((v) => v)}
+          {generateMagicText(result)}
           {generateCharacterText(result)}
           {generateMonsterText(result)}
           {generateNPCText(result)}
@@ -96,12 +92,9 @@ const App = () => {
           </div>
         )}
         <div className={styles["tables"]}>
-          {tables.map(
-            (t) =>
-              console.log(t, TABLES, TABLES[t]) || (
-                <Table table={TABLES[t].table} tableName={t} key={t} />
-              )
-          )}
+          {tables.map((t) => (
+            <Table table={TABLES[t].table} tableName={t} key={t} />
+          ))}
         </div>
       </div>
     </div>

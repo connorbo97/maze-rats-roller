@@ -12,12 +12,22 @@ import { TABLES, getTableLabel } from "../constants/tables";
 
 const classNameBuilder = classnames.bind(styles);
 
+const has = (arr, val) => new Set(arr).has(val);
+const checkSelected = (rollGroup, rollValue, rowI, valI) => {
+  return (rollGroup || []).some(
+    (r, i) => r === valI && (rollValue || [])[i] === rowI
+  );
+};
+
 export const Table = ({ table, tableName }) => {
   const { rollAll, updateResultByKey, updateTables, tables } = useRedux();
   const initialRollAll = useRef(rollAll);
   const [lock, setLock] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
   const [rollValue, setRollValue] = useState(null);
+  const [numRolls, setNumRolls] = useState(
+    TABLES[tableName].defaultNumRolls || 1
+  );
 
   const modifiedTable = useMemo(() => {
     const twoDTable = [];
@@ -38,31 +48,39 @@ export const Table = ({ table, tableName }) => {
     (newRollGroup, newRollValue) => {
       setRollGroup(newRollGroup);
       setRollValue(newRollValue);
-      let value = Object.values(table)[newRollGroup][newRollValue];
+      let value = [];
 
-      if (TABLES[tableName]?.calculateValue) {
-        value = TABLES[tableName].calculateValue(value);
+      for (let i = 0; i < numRolls; i++) {
+        value[i] = Object.values(table)[newRollGroup[i]][newRollValue[i]];
       }
 
       updateResultByKey(tableName, value);
     },
-    [table, tableName, updateResultByKey]
+    [numRolls, table, tableName, updateResultByKey]
   );
 
   const onRoll = useCallback(() => {
     if (lock) {
       return;
     }
-    const newRollGroup = Math.floor(Math.random() * Object.keys(table).length);
-    const newRollValue = Math.floor(
-      Math.random() * table[Object.keys(table)[newRollGroup]].length
-    );
+    const newRollGroup = [];
+    const newRollValue = [];
+    for (let i = 0; i < numRolls; i++) {
+      newRollGroup[i] = Math.floor(Math.random() * Object.keys(table).length);
+      newRollValue[i] = Math.floor(
+        Math.random() * table[Object.keys(table)[newRollGroup[i]]].length
+      );
+    }
 
     updateRolls(newRollGroup, newRollValue);
-  }, [lock, table, updateRolls]);
+  }, [lock, numRolls, table, updateRolls]);
 
   const onDelete = () => {
     updateTables(tables.filter((t) => t !== tableName));
+  };
+
+  const onChangeNumRolls = (e) => {
+    setNumRolls(e.target.value);
   };
 
   useEffect(() => {
@@ -83,20 +101,29 @@ export const Table = ({ table, tableName }) => {
         >
           {lock ? "Unlock" : "Lock"}
         </button>
+        {TABLES[tableName].maxNumRolls !== 1 && (
+          <input
+            type="number"
+            value={numRolls}
+            min={1}
+            max={TABLES[tableName].maxNumRolls}
+            onChange={onChangeNumRolls}
+          />
+        )}
       </div>
       <table className={styles["table"]}>
-        <thead>
+        {/* <thead>
           <tr>
             {Object.keys(table).map((k, i) => (
               <th
                 key={k}
-                className={classNameBuilder({ selected: rollGroup === i })}
+                className={classNameBuilder({ selected: has(rollGroup, i) })}
               >
                 {k}
               </th>
             ))}
           </tr>
-        </thead>
+        </thead> */}
         <tbody>
           {modifiedTable.map((row, rowI) => {
             return (
@@ -105,11 +132,19 @@ export const Table = ({ table, tableName }) => {
                   <td
                     key={valI}
                     className={classNameBuilder({
-                      selected: rollValue === rowI && rollGroup === valI,
-                      "selected-group": rollGroup === valI,
+                      selected: checkSelected(rollGroup, rollValue, rowI, valI),
+                      "selected-group": has(rollGroup, valI),
                     })}
                     onClick={() => {
-                      updateRolls(valI, rowI);
+                      const rollGroupArr = [];
+                      const rollValueArr = [];
+
+                      for (let i = 0; i < numRolls; i++) {
+                        rollGroupArr[i] = valI;
+                        rollValueArr[i] = rowI;
+                      }
+
+                      updateRolls(rollGroupArr, rollValueArr);
                     }}
                   >
                     {val}

@@ -30,7 +30,15 @@ export const ReduxContextProvider: any = ({ children }) => {
   }, []);
 
   const updateResultByKey = useCallback((k, value) => {
-    setResult((old) => ({ ...old, [k]: value }));
+    if (value === null) {
+      setResult((old: any) => {
+        const { [k]: removed, newResult } = old;
+
+        return newResult;
+      });
+    } else {
+      setResult((old) => ({ ...old, [k]: value }));
+    }
   }, []);
 
   const value = useMemo(

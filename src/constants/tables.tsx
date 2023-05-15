@@ -6,8 +6,9 @@ declare type TableDef = {
 declare type Table = {
   table: TableDef;
   label: string;
-  getResultText?: Function;
-  calculateValue?: Function;
+  defaultNumRolls?: number;
+  valueSeparator?: string;
+  maxNumRolls?: number;
 };
 export const TABLE_NAMES = {
   MAGIC_TABLE_ROLL: "MAGIC_TABLE_ROLL",
@@ -74,48 +75,6 @@ export const TABLES: { [s: string]: Table } = {
         "Ethereal Effect + Physical Element",
         "Ethereal Effect + Ethereal Element",
       ],
-    },
-    calculateValue: (valueOriginal) => {
-      const value = valueOriginal.split(" + ");
-
-      const calcTableNameFromTableRollValue = (tableRollValue) => {
-        switch (tableRollValue) {
-          case "Physical Effect":
-            return TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS;
-          case "Physical Element":
-            return TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS;
-          case "Physical Form":
-            return TABLE_NAMES.MAGIC_PHYSICAL_FORMS;
-          case "Ethereal Effect":
-            return TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS;
-          case "Ethereal Element":
-            return TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS;
-          case "Ethereal Form":
-          default:
-            return TABLE_NAMES.MAGIC_ETHEREAL_FORMS;
-        }
-      };
-
-      return value.map((v) => calcTableNameFromTableRollValue(v));
-    },
-    getResultText: (result) => {
-      if (!result) {
-        return null;
-      }
-      const resultString =
-        result[TABLE_NAMES.MAGIC_TABLE_ROLL]
-          ?.map((name) => result?.[name])
-          .join(" ") || "";
-
-      if (!resultString) {
-        return null;
-      }
-
-      return (
-        <div>
-          <b>Spell name:</b> {resultString}
-        </div>
-      );
     },
   },
   [TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS]: {
@@ -184,6 +143,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.MAGIC_PHYSICAL_FORMS]: {
     label: "Magic Spells: Physical Forms",
+    valueSeparator: " ",
     table: {
       "1": ["Altar", "Armor", "Arrow", "Beast", "Blade", "Cauldron"],
       "2": ["Chain", "Chariot", "Claw", "Cloak", "Colossus", "Crown"],
@@ -259,7 +219,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.MAGIC_ETHEREAL_FORMS]: {
     label: "Magic Spells: Ethereal Forms",
-
+    valueSeparator: " ",
     table: {
       "1": ["Aura", "Beacon", "Beam", "Blast", "Blob", "Bolt"],
       "2": ["Bubble", "Call", "Cascade", "Circle", "Cloud", "Coil"],
@@ -289,6 +249,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.CHARACTER_APPEARANCE]: {
     label: "Character: Build",
+    defaultNumRolls: 2,
     table: {
       "1": [
         "Aquiline",
@@ -321,6 +282,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.CHARACTER_PHYSICAL_DETAIL]: {
     label: "Character: Physical Detail",
+    defaultNumRolls: 2,
     table: {
       "1": [
         "Acid scars",
@@ -374,6 +336,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.CHARACTER_CLOTHES]: {
     label: "Character: Clothes",
+    defaultNumRolls: 2,
     table: {
       "1": [
         "Antique",
