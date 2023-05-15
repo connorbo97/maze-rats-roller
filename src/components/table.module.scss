@@ -11,6 +11,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-wrap: wrap;
         column-gap: 5px;
         > button {
             padding: 5px;
