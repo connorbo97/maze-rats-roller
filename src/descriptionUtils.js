@@ -80,24 +80,50 @@ export const generateCharacterText = (result) => {
   }
 
   const tables = PRESETS.CHARACTER;
+  const formattedMap = {};
+  tables.forEach(
+    (t) =>
+      (formattedMap[t] = uniq(
+        (result[t] || []).map((v) => CHARACTER_PROPERTY_TO_FLAVOR_TEXT[v] || v)
+      ).join(", "))
+  );
+  const descriptionText = `a full-body shot of a fantasy themed ${
+    formattedMap[TABLE_NAMES.CHARACTER_SEX]
+  }${getCSVText(
+    formattedMap[TABLE_NAMES.CHARACTER_RACE],
+    " ",
+    "",
+    true
+  )} with a ${formattedMap[TABLE_NAMES.CHARACTER_APPEARANCE]} build${getCSVText(
+    formattedMap[TABLE_NAMES.CHARACTER_PHYSICAL_DETAIL]
+  )}${getCSVText(
+    formattedMap[TABLE_NAMES.CHARACTER_CLOTHES],
+    "wearing ",
+    " clothes"
+  )}${getCSVText(
+    formattedMap[TABLE_NAMES.CHARACTER_PERSONALITY],
+    "and a ",
+    " personality"
+  )}
+`;
 
   return (
-    <span className={styles["monster"]}>
-      <b>
-        <u>Character</u>
-      </b>
+    <div>
+      <div className={styles["monster"]}>
+        <b>
+          <u>Character</u>
+        </b>
+        <br />
+        {tables.map((t) => (
+          <Tag
+            label={TABLES[t].label.split("Character: ")[1]}
+            val={formattedMap[t]}
+          />
+        ))}
+      </div>
       <br />
-      {tables.map((t) => (
-        <Tag
-          label={TABLES[t].label.split("Character: ")[1]}
-          val={uniq(
-            (result[t] || []).map(
-              (v) => CHARACTER_PROPERTY_TO_FLAVOR_TEXT[v] || v
-            )
-          ).join(", ")}
-        />
-      ))}
-    </span>
+      <div>{descriptionText}</div>
+    </div>
   );
 
   // const sexText =
