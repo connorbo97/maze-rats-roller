@@ -73,7 +73,7 @@ export const generateMagicText = (result) => {
         <span style={{ borderRight: "0" }}>{spellName}</span>
       </span>
       <br />
-      <span>{`A wizard casting a spell called ${spellName}`}</span>
+      <span>{`An adventurer casting a spell called ${spellName} in a field`}</span>
     </div>
   );
 };
@@ -186,15 +186,18 @@ export const generateMonsterText = (result) => {
   });
 
   return (
-    <span className={styles["monster"]}>
-      <b>
-        <u>Monster</u>
-      </b>
-      <br />
-      {tables.map((t) => (
-        <Tag label={TABLES[t].label.split(": ")[1]} val={formattedMap[t]} />
-      ))}
-    </span>
+    <div>
+      <div className={styles["monster"]}>
+        <b>
+          <u>Monster</u>
+        </b>
+        <br />
+        {tables.map((t) => (
+          <Tag label={TABLES[t].label.split(": ")[1]} val={formattedMap[t]} />
+        ))}
+      </div>
+      {tables.map((t) => formattedMap[t]).join("; ")}
+    </div>
   );
 
   // const species =
