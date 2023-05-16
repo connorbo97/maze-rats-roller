@@ -627,7 +627,7 @@ export const TABLES: { [s: string]: Table } = {
         "Plumage",
         "Proboscis",
         "Scales",
-        "Segments",
+        "Segmented",
         "Shaggy hair",
       ],
       "5": [
