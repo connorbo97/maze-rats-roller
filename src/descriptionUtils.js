@@ -365,7 +365,7 @@ export const generateCityText = (result, onClickTag) => {
   }
 
   const formattedMap = {};
-  tables.forEach((t) => (formattedMap[t] = result[t]));
+  tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
 
   return (
     <div>
