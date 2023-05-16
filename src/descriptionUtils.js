@@ -48,29 +48,33 @@ export const generateMagicText = (result) => {
     }
   };
 
+  const spellName = values
+    .map((v) =>
+      v
+        .map(
+          (tName) =>
+            uniq(result[calcTableNameFromTableRollValue(tName)]).join(
+              TABLES[calcTableNameFromTableRollValue(tName)].valueSeparator ||
+                " "
+            ) || ""
+        )
+        .filter((v) => v)
+        .join(" ")
+    )
+    .join(", ");
+
   return (
-    <span className={styles["monster"]}>
-      <b>
-        <u>Spell Name:</u>
-      </b>
-      <br />
-      <span style={{ borderRight: "0" }}>
-        {values
-          .map((v) =>
-            v
-              .map(
-                (tName) =>
-                  uniq(result[calcTableNameFromTableRollValue(tName)]).join(
-                    TABLES[calcTableNameFromTableRollValue(tName)]
-                      .valueSeparator || " "
-                  ) || ""
-              )
-              .filter((v) => v)
-              .join(" ")
-          )
-          .join(", ")}
+    <div>
+      <span className={styles["monster"]}>
+        <b>
+          <u>Spell Name:</u>
+        </b>
+        <br />
+        <span style={{ borderRight: "0" }}>{spellName}</span>
       </span>
-    </span>
+      <br />
+      <span>{`A wizard casting a spell called ${spellName}`}</span>
+    </div>
   );
 };
 
@@ -261,18 +265,56 @@ export const generateNPCText = (result) => {
     return null;
   }
 
+  const formattedMap = {};
+  tables.forEach((t) => (formattedMap[t] = result[t]));
+  const civilTextPrefix = `a full body shot of a fantasy themed  ${
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION]
+  }`;
+  const underworldTextPrefix = `a full body shot of a fantasy themed ${
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_UNDERWORLD]
+  }`;
+  const wildernessTextPrefix = `a full body shot of a fantasy themed ${
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_WILDERNESS]
+  }`;
+
+  const restOfText = ` who was ${
+    formattedMap[TABLE_NAMES.NPC_MISFORTUNES]
+  } and is now on a mission to ${
+    formattedMap[TABLE_NAMES.NPC_GOALS]
+  }, but they're known to be ${formattedMap[TABLE_NAMES.NPC_LIABILITIES]}`;
+
   return (
-    <span className={styles["monster"]}>
-      <b>
-        <u>NPC</u>
-      </b>
-      <br />
-      {tables.map((t) => (
-        <Tag
-          label={TABLES[t].label.split("NPC: ")[1]}
-          val={CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[t]] || result[t]}
-        />
-      ))}
-    </span>
+    <div>
+      <div className={styles["monster"]}>
+        <b>
+          <u>NPC</u>
+        </b>
+        <br />
+        {tables.map((t) => (
+          <Tag
+            label={TABLES[t].label.split("NPC: ")[1]}
+            val={formattedMap[t]}
+          />
+        ))}
+      </div>
+      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION] && (
+        <>
+          <br />
+          <div>{`${civilTextPrefix}${restOfText}`}</div>
+        </>
+      )}
+      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_UNDERWORLD] && (
+        <>
+          <br />
+          <div>{`${underworldTextPrefix}${restOfText}`}</div>
+        </>
+      )}
+      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_WILDERNESS] && (
+        <>
+          <br />
+          <div>{`${wildernessTextPrefix}${restOfText}`}</div>
+        </>
+      )}
+    </div>
   );
 };
