@@ -57,4 +57,5 @@ export const PRESET_LABELS = {
   MAGIC: "Magic Spells",
   CHARACTER: "Character Traits & Personality",
   MONSTER: "Monsters",
+  NAMES: "Names",
 };

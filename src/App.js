@@ -15,7 +15,14 @@ import {
 } from "./descriptionUtils";
 
 const App = () => {
-  const { updateRollAll, tables, tablesSet, result, updateTables } = useRedux();
+  const {
+    updateRollAll,
+    tables,
+    tablesSet,
+    result,
+    updateTables,
+    updateForceRollByTable,
+  } = useRedux();
   const [tableFilter, setTableFilter] = useState("");
   const onChangePreset = (e) => {
     updateTables(PRESETS[e.target.value]);
@@ -32,7 +39,6 @@ const App = () => {
       e.target.value = "";
     }
   };
-  console.log(tables);
 
   return (
     <div className={styles["app"]}>
@@ -81,10 +87,10 @@ const App = () => {
           />
         </div>
         <div className={styles["result"]}>
-          {generateMagicText(result)}
-          {generateCharacterText(result)}
-          {generateMonsterText(result)}
-          {generateNPCText(result)}
+          {generateMagicText(result, updateForceRollByTable)}
+          {generateCharacterText(result, updateForceRollByTable)}
+          {generateMonsterText(result, updateForceRollByTable)}
+          {generateNPCText(result, updateForceRollByTable)}
         </div>
         {!tables?.length && (
           <div className={styles["help-text"]}>

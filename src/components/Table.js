@@ -20,8 +20,16 @@ const checkSelected = (rollGroup, rollValue, rowI, valI) => {
 };
 
 export const Table = ({ table, tableName }) => {
-  const { rollAll, updateResultByKey, updateTables, tables } = useRedux();
+  const {
+    rollAll,
+    updateResultByKey,
+    updateTables,
+    tables,
+    forceRoll: forceRollObj,
+  } = useRedux();
+  const forceRoll = forceRollObj[tableName];
   const initialRollAll = useRef(rollAll);
+  const initialForceRoll = useRef(forceRollObj[tableName]);
   const [lock, setLock] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
   const [rollValue, setRollValue] = useState(null);
@@ -84,10 +92,13 @@ export const Table = ({ table, tableName }) => {
   };
 
   useEffect(() => {
-    if (rollAll !== initialRollAll.current) {
+    if (
+      rollAll !== initialRollAll.current ||
+      forceRoll !== initialForceRoll.current
+    ) {
       onRoll();
     }
-  }, [rollAll, onRoll]);
+  }, [rollAll, onRoll, forceRoll, initialForceRoll]);
 
   return (
     <div className={styles["container"]}>

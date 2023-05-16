@@ -9,20 +9,20 @@ import { uniq } from "lodash";
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
 
-const Tag = ({ val, label }) => {
+const Tag = ({ val, label, table, onClick }) => {
   if (!val) {
     return null;
   }
 
   return (
-    <span>
+    <span style={{ cursor: "pointer" }} onClick={() => onClick(table)}>
       <b>{label}: </b>
       {val}
     </span>
   );
 };
 
-export const generateMagicText = (result) => {
+export const generateMagicText = (result, onClickTag) => {
   if (!result[TABLE_NAMES.MAGIC_TABLE_ROLL]) {
     return null;
   }
@@ -78,7 +78,7 @@ export const generateMagicText = (result) => {
   );
 };
 
-export const generateCharacterText = (result) => {
+export const generateCharacterText = (result, onClickTag) => {
   if (Object.keys(result).every((k) => k.indexOf("CHARACTER_") === -1)) {
     return null;
   }
@@ -122,6 +122,8 @@ export const generateCharacterText = (result) => {
           <Tag
             label={TABLES[t].label.split("Character: ")[1]}
             val={formattedMap[t]}
+            table={t}
+            onClick={onClickTag}
           />
         ))}
       </div>
@@ -158,7 +160,7 @@ export const generateCharacterText = (result) => {
 //   Tail: "with a ",
 //   Trunk: "with an elephant-like ",
 // };
-export const generateMonsterText = (result) => {
+export const generateMonsterText = (result, onClickTag) => {
   if (Object.keys(result).every((k) => k.indexOf("MONSTER_") === -1)) {
     return null;
   }
@@ -193,7 +195,12 @@ export const generateMonsterText = (result) => {
         </b>
         <br />
         {tables.map((t) => (
-          <Tag label={TABLES[t].label.split(": ")[1]} val={formattedMap[t]} />
+          <Tag
+            label={TABLES[t].label.split(": ")[1]}
+            val={formattedMap[t]}
+            table={t}
+            onClick={onClickTag}
+          />
         ))}
       </div>
       {tables.map((t) => formattedMap[t]).join("; ")}
@@ -262,7 +269,7 @@ export const generateMonsterText = (result) => {
   // );
 };
 
-export const generateNPCText = (result) => {
+export const generateNPCText = (result, onClickTag) => {
   const tables = PRESETS.NPC;
   if (Object.keys(result).every((k) => k.indexOf("NPC_") === -1)) {
     return null;
@@ -297,11 +304,16 @@ export const generateNPCText = (result) => {
           <Tag
             label={TABLES[t].label.split("NPC: ")[1]}
             val={formattedMap[t]}
+            table={t}
+            onClick={onClickTag}
           />
         ))}
       </div>
       <br />
       <span>
+        <b>
+          <u>NAMES</u>{" "}
+        </b>
         {formattedMap[TABLE_NAMES.NPC_MALE_NAME] &&
           formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME] &&
           `${formattedMap[TABLE_NAMES.NPC_MALE_NAME]} ${

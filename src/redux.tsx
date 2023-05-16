@@ -17,6 +17,15 @@ export const ReduxContextProvider: any = ({ children }) => {
   const [rollAll, setRollAll] = useState(0);
   const [tables, setTables] = useState([]);
   const [result, setResult] = useState({});
+  const [forceRoll, setForceRoll] = useState({});
+
+  const updateForceRollByTable = useCallback((t) => {
+    setForceRoll((prev) => {
+      const copy = { ...prev };
+      copy[t] = (copy[t] || 0) + 1;
+      return copy;
+    });
+  }, []);
 
   const updateRollAll = useCallback(() => {
     setRollAll((a) => a + 1);
@@ -46,12 +55,23 @@ export const ReduxContextProvider: any = ({ children }) => {
       updateRollAll,
       updateTables,
       updateResultByKey,
+      updateForceRollByTable,
       result,
       tables,
       tablesSet: new Set(tables),
       rollAll,
+      forceRoll,
     }),
-    [result, rollAll, tables, updateResultByKey, updateRollAll, updateTables]
+    [
+      forceRoll,
+      result,
+      rollAll,
+      tables,
+      updateForceRollByTable,
+      updateResultByKey,
+      updateRollAll,
+      updateTables,
+    ]
   );
 
   return <BaseProvider value={value}>{children}</BaseProvider>;
