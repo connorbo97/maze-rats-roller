@@ -357,3 +357,32 @@ export const generateNPCText = (result, onClickTag) => {
     </div>
   );
 };
+
+export const generateCityText = (result, onClickTag) => {
+  const tables = PRESETS.CITY;
+  if (Object.keys(result).every((k) => k.indexOf("CITY_") === -1)) {
+    return null;
+  }
+
+  const formattedMap = {};
+  tables.forEach((t) => (formattedMap[t] = result[t]));
+
+  return (
+    <div>
+      <div className={styles["monster"]}>
+        <b>
+          <u>City</u>
+        </b>
+        <br />
+        {tables.map((t) => (
+          <Tag
+            label={TABLES[t].label.split("City: ")[1]}
+            val={formattedMap[t]}
+            table={t}
+            onClick={onClickTag}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};

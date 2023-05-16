@@ -9,6 +9,7 @@ import { useRedux } from "./redux";
 import { useState } from "react";
 import {
   generateCharacterText,
+  generateCityText,
   generateMagicText,
   generateMonsterText,
   generateNPCText,
@@ -91,6 +92,7 @@ const App = () => {
           {generateCharacterText(result, updateForceRollByTable)}
           {generateMonsterText(result, updateForceRollByTable)}
           {generateNPCText(result, updateForceRollByTable)}
+          {generateCityText(result, updateForceRollByTable)}
         </div>
         {!tables?.length && (
           <div className={styles["help-text"]}>
