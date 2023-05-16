@@ -300,6 +300,30 @@ export const generateNPCText = (result) => {
           />
         ))}
       </div>
+      <br />
+      <span>
+        {formattedMap[TABLE_NAMES.NPC_MALE_NAME] &&
+          formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME] &&
+          `${formattedMap[TABLE_NAMES.NPC_MALE_NAME]} ${
+            formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME]
+          } | `}
+        {formattedMap[TABLE_NAMES.NPC_FEMALE_NAME] &&
+          formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME] &&
+          `${formattedMap[TABLE_NAMES.NPC_FEMALE_NAME]} ${
+            formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME]
+          } | `}
+        {formattedMap[TABLE_NAMES.NPC_MALE_NAME] &&
+          formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME] &&
+          `${formattedMap[TABLE_NAMES.NPC_MALE_NAME]} ${
+            formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME]
+          } | `}
+        {formattedMap[TABLE_NAMES.NPC_FEMALE_NAME] &&
+          formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME] &&
+          `${formattedMap[TABLE_NAMES.NPC_FEMALE_NAME]} ${
+            formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME]
+          } | `}
+      </span>
+      <br />
       {formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION] && (
         <>
           <br />
