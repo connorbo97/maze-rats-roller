@@ -1,4 +1,5 @@
 .monster {
+    flex: 1;
     display: flex;
     column-gap: 10px;
     row-gap: 10px;
@@ -11,4 +12,13 @@
         border-right: 5px solid white;
         padding-right: 10px;
     }
+}
+
+.save-container {
+    display: flex;
+    align-items: stretch;
+}
+
+.container {
+    width: 100%;
 }

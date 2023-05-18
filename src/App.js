@@ -123,24 +123,26 @@ const App = () => {
         {page === PAGES.HISTORY && (
           <div>
             <button onClick={() => setHistory([])}>Clear History</button>
-            {history.map((h) => (
-              <>
-                <div className={styles["result"]}>
-                  <Results
-                    result={h}
-                    onAddSaved={onAddSaved}
-                    onClickTag={noop}
+            {history.map((h) =>
+              Object.keys(h).length ? (
+                <>
+                  <div className={styles["result"]}>
+                    <Results
+                      result={h}
+                      onAddSaved={onAddSaved}
+                      onClickTag={noop}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "10px",
+                      backgroundColor: "white",
+                    }}
                   />
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "10px",
-                    backgroundColor: "white",
-                  }}
-                />
-              </>
-            ))}
+                </>
+              ) : null
+            )}
           </div>
         )}
         {page === PAGES.SAVED && (

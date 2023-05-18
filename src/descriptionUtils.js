@@ -1,26 +1,9 @@
-import {
-  CHARACTER_PROPERTY_TO_FLAVOR_TEXT,
-  TABLES,
-  TABLE_NAMES,
-} from "./constants";
-import { PRESETS } from "./constants/presets";
+import { TABLES, TABLE_NAMES } from "./constants";
 import styles from "./descriptionUtils.module.scss";
-import { intersection, uniq } from "lodash";
+import { uniq } from "lodash";
+
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
-
-const Tag = ({ val, label, table, onClick }) => {
-  if (!val) {
-    return null;
-  }
-
-  return (
-    <span style={{ cursor: "pointer" }} onClick={() => onClick(table)}>
-      <b>{label}: </b>
-      {val}
-    </span>
-  );
-};
 
 export const generateMagicText = (result, onClickTag, onSave) => {
   if (!result[TABLE_NAMES.MAGIC_TABLE_ROLL]) {
@@ -73,7 +56,7 @@ export const generateMagicText = (result, onClickTag, onSave) => {
         <span style={{ borderRight: "0" }}>{spellName}</span>
       </span>
       <br />
-      <span>{`An adventurer casting a spell called ${spellName} in a field`}</span>
+      <span>{`A spell called ${spellName}`}</span>
     </div>
   );
 
@@ -85,19 +68,7 @@ export const generateMagicText = (result, onClickTag, onSave) => {
   );
 };
 
-export const generateCharacterText = (result, onClickTag, onSave) => {
-  if (Object.keys(result).every((k) => k.indexOf("CHARACTER_") === -1)) {
-    return null;
-  }
-
-  const tables = PRESETS.CHARACTER;
-  const formattedMap = {};
-  tables.forEach(
-    (t) =>
-      (formattedMap[t] = uniq(
-        (result[t] || []).map((v) => CHARACTER_PROPERTY_TO_FLAVOR_TEXT[v] || v)
-      ).join(", "))
-  );
+export const renderCharacterBottomText = (formattedMap, tables) => {
   const descriptionText = `a full-body shot of a fantasy themed ${
     formattedMap[TABLE_NAMES.CHARACTER_SEX]
   }${getCSVText(
@@ -115,35 +86,13 @@ export const generateCharacterText = (result, onClickTag, onSave) => {
     formattedMap[TABLE_NAMES.CHARACTER_PERSONALITY],
     "and a ",
     " personality"
-  )}
-`;
-
-  const jsxResult = (
-    <div>
-      <div className={styles["monster"]}>
-        <b>
-          <u>Character</u>
-        </b>
-        <br />
-        {tables.map((t) => (
-          <Tag
-            label={TABLES[t].label.split("Character: ")[1]}
-            val={formattedMap[t]}
-            table={t}
-            onClick={onClickTag}
-          />
-        ))}
-      </div>
-      <br />
-      <div>{descriptionText}</div>
-    </div>
-  );
+  )}`;
 
   return (
-    <div className={styles["save-container"]}>
-      {jsxResult}
-      <button onClick={() => onSave(jsxResult)}>SAVE</button>
-    </div>
+    <>
+      <br />
+      <div>{descriptionText}</div>
+    </>
   );
 };
 
@@ -175,103 +124,41 @@ export const generateCharacterText = (result, onClickTag, onSave) => {
 //   Trunk: "with an elephant-like ",
 // };
 export const generateMonsterText = (result, onClickTag, onSave) => {
-  const tables = PRESETS.MONSTER;
-  if (intersection(Object.keys(result), tables).length === 0) {
-    return null;
-  }
-
-  const formattedMap = {};
-  tables.forEach((t) => {
-    formattedMap[t] = (result[t] || [])
-      .map((v) => {
-        if (v === "Physical Element") {
-          return result[TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS] || v;
-        } else if (v === "Physical Effect") {
-          return result[TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS] || v;
-        } else if (v === "Ethereal Element") {
-          return result[TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS] || v;
-        } else if (v === "Ethereal Effect") {
-          return result[TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS] || v;
-        }
-
-        return v;
-      })
-      .map((v) => CHARACTER_PROPERTY_TO_FLAVOR_TEXT[v] || v)
-      .join(", ");
-  });
-
-  const jsxResult = (
-    <div>
-      <div className={styles["monster"]}>
-        <b>
-          <u>Monster</u>
-        </b>
-        <br />
-        {tables.map((t) => (
-          <Tag
-            label={TABLES[t].label.split(": ")[1]}
-            val={formattedMap[t]}
-            table={t}
-            onClick={onClickTag}
-          />
-        ))}
-      </div>
-      {tables.map((t) => formattedMap[t]).join("; ")}
-    </div>
-  );
-
-  return (
-    <div className={styles["save-container"]}>
-      {jsxResult}
-      <button onClick={() => onSave(jsxResult)}>SAVE</button>
-    </div>
-  );
-
   // const species =
   //   result[valToAnimal[result[TABLE_NAMES.MONSTER_TYPE]]] ||
   //   result[TABLE_NAMES.MONSTER_TYPE];
-
   // const featuresText =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[TABLE_NAMES.MONSTER_FEATURES]] ||
   //   result[TABLE_NAMES.MONSTER_FEATURES];
-
   // let traitsText =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[TABLE_NAMES.MONSTER_TRAITS]] ||
   //   result[TABLE_NAMES.MONSTER_TRAITS];
-
   // if (result[TABLE_NAMES.MONSTER_TRAITS] === "Physical Element") {
   //   traitsText = result[TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS] || traitsText;
   // } else if (result[TABLE_NAMES.MONSTER_TRAITS] === "Ethereal Element") {
   //   traitsText = result[TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS] || traitsText;
   // }
-
   // let abilitiesText =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[TABLE_NAMES.MONSTER_ABILITIES]] ||
   //   result[TABLE_NAMES.MONSTER_ABILITIES];
-
   // if (result[TABLE_NAMES.MONSTER_TRAITS] === "Physical Effect") {
   //   abilitiesText = result[TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS] || abilitiesText;
   // } else if (result[TABLE_NAMES.MONSTER_TRAITS] === "Ethereal Effect") {
   //   abilitiesText = result[TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS] || abilitiesText;
   // }
-
   // const tactics =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[TABLE_NAMES.MONSTER_TACTICS]] ||
   //   result[TABLE_NAMES.MONSTER_TACTICS];
-
   // const personality =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[
   //     result[TABLE_NAMES.MONSTER_PERSONALITY]
   //   ] || result[TABLE_NAMES.MONSTER_PERSONALITY];
-
   // let weakness =
   //   CHARACTER_PROPERTY_TO_FLAVOR_TEXT[result[TABLE_NAMES.MONSTER_WEAKNESS]] ||
   //   result[TABLE_NAMES.MONSTER_WEAKNESS];
-
   // if (result[TABLE_NAMES.MONSTER_WEAKNESS] === "Physical Element") {
   //   weakness = result[TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS] || weakness;
   // }
-
   // return (
   //   <span className={styles["monster"]}>
   //     <b>
@@ -289,14 +176,7 @@ export const generateMonsterText = (result, onClickTag, onSave) => {
   // );
 };
 
-export const generateNPCText = (result, onClickTag, onSave) => {
-  const tables = PRESETS.NPC;
-  if (Object.keys(result).every((k) => k.indexOf("NPC_") === -1)) {
-    return null;
-  }
-
-  const formattedMap = {};
-  tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
+export const renderNPCBottomText = (formattedMap) => {
   const civilTextPrefix = `a full body shot of a fantasy themed  ${
     formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION]
   }`;
@@ -312,23 +192,8 @@ export const generateNPCText = (result, onClickTag, onSave) => {
   } and is now on a mission to ${
     formattedMap[TABLE_NAMES.NPC_GOALS]
   }, but they're known to be ${formattedMap[TABLE_NAMES.NPC_LIABILITIES]}`;
-
-  const jsxResult = (
-    <div>
-      <div className={styles["monster"]}>
-        <b>
-          <u>NPC</u>
-        </b>
-        <br />
-        {tables.map((t) => (
-          <Tag
-            label={TABLES[t].label.split("NPC: ")[1]}
-            val={formattedMap[t]}
-            table={t}
-            onClick={onClickTag}
-          />
-        ))}
-      </div>
+  return (
+    <>
       <br />
       <span>
         <b>
@@ -374,49 +239,6 @@ export const generateNPCText = (result, onClickTag, onSave) => {
           <div>{`${wildernessTextPrefix}${restOfText}`}</div>
         </>
       )}
-    </div>
-  );
-
-  return (
-    <div className={styles["save-container"]}>
-      {jsxResult}
-      <button onClick={() => onSave(jsxResult)}>SAVE</button>
-    </div>
-  );
-};
-
-export const generateCityText = (result, onClickTag, onSave) => {
-  const tables = PRESETS.CITY;
-  if (Object.keys(result).every((k) => k.indexOf("CITY_") === -1)) {
-    return null;
-  }
-
-  const formattedMap = {};
-  tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
-
-  const jsxResult = (
-    <div>
-      <div className={styles["monster"]}>
-        <b>
-          <u>City</u>
-        </b>
-        <br />
-        {tables.map((t) => (
-          <Tag
-            label={TABLES[t].label.split("City: ")[1]}
-            val={formattedMap[t]}
-            table={t}
-            onClick={onClickTag}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className={styles["save-container"]}>
-      {jsxResult}
-      <button onClick={() => onSave(jsxResult)}>SAVE</button>
-    </div>
+    </>
   );
 };

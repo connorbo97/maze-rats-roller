@@ -1,28 +1,61 @@
 import React from "react";
 import {
-  generateCharacterText,
-  generateCityText,
   generateMagicText,
-  generateMonsterText,
-  generateNPCText,
+  renderCharacterBottomText,
+  renderNPCBottomText,
 } from "../descriptionUtils";
 import { PRESETS, PRESET_LABELS } from "../constants/presets";
-import { Result } from "./Result";
+import {
+  Result,
+  allMatchShouldRenderFunc,
+  prefixMatchShouldRenderFunc,
+} from "./Result";
 
 export const Results = ({ result, onAddSaved, onClickTag }) => {
   return (
     <>
       {generateMagicText(result, onClickTag, onAddSaved)}
-      {generateCharacterText(result, onClickTag, onAddSaved)}
-      {generateMonsterText(result, onClickTag, onAddSaved)}
-      {generateNPCText(result, onClickTag, onAddSaved)}
-      {generateCityText(result, onClickTag, onAddSaved)}
+      <Result
+        result={result}
+        label={PRESET_LABELS.CHARACTER}
+        onClickTag={onClickTag}
+        onSave={onAddSaved}
+        tables={PRESETS.CHARACTER}
+        renderBottomText={renderCharacterBottomText}
+        shouldRender={prefixMatchShouldRenderFunc("CHARACTER_")}
+      />
+      <Result
+        result={result}
+        label={PRESET_LABELS.MONSTER}
+        onClickTag={onClickTag}
+        onSave={onAddSaved}
+        tables={PRESETS.MONSTER}
+        shouldRender={prefixMatchShouldRenderFunc("MONSTER_")}
+      />
+      <Result
+        result={result}
+        label={PRESET_LABELS.NPC}
+        onClickTag={onClickTag}
+        onSave={onAddSaved}
+        tables={PRESETS.NPC}
+        renderBottomText={renderNPCBottomText}
+        shouldRender={prefixMatchShouldRenderFunc("NPC_")}
+      />
+      <Result
+        result={result}
+        label={PRESET_LABELS.CITY}
+        onClickTag={onClickTag}
+        onSave={onAddSaved}
+        tables={PRESETS.CITY}
+        shouldRender={prefixMatchShouldRenderFunc("CITY_")}
+      />
       <Result
         result={result}
         label={PRESET_LABELS.DUNGEON}
         onClickTag={onClickTag}
         onSave={onAddSaved}
         tables={PRESETS.DUNGEON}
+        shouldRender={prefixMatchShouldRenderFunc("DUNGEON_")}
       />
       <Result
         result={result}
@@ -30,6 +63,7 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         onClickTag={onClickTag}
         onSave={onAddSaved}
         tables={PRESETS.MUTATION}
+        shouldRender={allMatchShouldRenderFunc}
       />
       <Result
         result={result}
@@ -37,6 +71,7 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         onClickTag={onClickTag}
         onSave={onAddSaved}
         tables={PRESETS.INSANITY}
+        shouldRender={allMatchShouldRenderFunc}
       />
       <Result
         result={result}
@@ -44,6 +79,7 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         onClickTag={onClickTag}
         onSave={onAddSaved}
         tables={PRESETS.CATASTROPHES}
+        shouldRender={allMatchShouldRenderFunc}
       />
     </>
   );

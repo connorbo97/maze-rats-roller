@@ -115,6 +115,7 @@ export const PRESET_LABELS = {
   CHARACTER: "Character Traits & Personality",
   MONSTER: "Monsters",
   NAMES: "Names",
+  NPC: "NPC",
   CITY: "City",
   DUNGEON: "Dungeons",
   MUTATION: "Mutations",

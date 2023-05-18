@@ -1,8 +1,7 @@
 import React from "react";
 import styles from "./result.module.scss";
-import { TABLES } from "../constants";
+import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLES } from "../constants";
 import { intersection } from "lodash";
-import { useRedux } from "../redux";
 
 const Tag = ({ val, label, table, onClick }) => {
   if (!val) {
@@ -17,8 +16,24 @@ const Tag = ({ val, label, table, onClick }) => {
   );
 };
 
-const defaultShouldRenderFunc = (result, tables) =>
+export const allMatchShouldRenderFunc = (result, tables) =>
   intersection(Object.keys(result), tables).length === tables.length;
+export const partialShouldRenderFunc = (result, tables) =>
+  intersection(Object.keys(result), tables).length > 0;
+export const prefixMatchShouldRenderFunc = (prefix) => (result, tables) =>
+  Object.keys(result).find((v) => v.indexOf(prefix) !== -1);
+const defaultShouldRenderFunc = partialShouldRenderFunc;
+const defaultRenderBottomText = (formattedMap, tables) => (
+  <div>
+    <br />
+    <b>SUMMARY: </b>
+    <span>
+      {tables
+        .map((t) => `${TABLES[t].label.split(": ")[1]}: ${formattedMap[t]}`)
+        .join(" || ")}
+    </span>
+  </div>
+);
 
 export const Result = ({
   result,
@@ -26,24 +41,23 @@ export const Result = ({
   onClickTag,
   tables,
   onSave,
+  renderBottomText = defaultRenderBottomText,
   shouldRender = defaultShouldRenderFunc,
 }) => {
-  console.log(
-    label,
-    result,
-    tables,
-    shouldRender(result, tables),
-    intersection(Object.keys(result), tables).length
-  );
   if (!shouldRender(result, tables)) {
     return null;
   }
 
   const formattedMap = {};
-  tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
+  tables.forEach(
+    (t) =>
+      (formattedMap[t] = (result[t] || [])
+        .map((v) => CHARACTER_PROPERTY_TO_FLAVOR_TEXT[v] || v)
+        .join(", "))
+  );
 
   const jsxResult = (
-    <div>
+    <div className={styles["container"]}>
       <div className={styles["monster"]}>
         <b>
           <u>{label}</u>
@@ -58,6 +72,7 @@ export const Result = ({
           />
         ))}
       </div>
+      {renderBottomText(formattedMap, tables)}
     </div>
   );
 
