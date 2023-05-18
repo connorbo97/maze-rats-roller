@@ -37,9 +37,14 @@ export const Table = ({ table, tableName }) => {
   const [disableValues, setDisableValues] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
   const [rollValue, setRollValue] = useState(null);
+  const [insertOrder, setInsertOrder] = useState(0);
   const [numRolls, setNumRolls] = useState(
     TABLES[tableName].defaultNumRolls || 1
   );
+
+  useEffect(() => {
+    setInsertOrder(0);
+  }, [numRolls]);
 
   const modifiedTable = useMemo(() => {
     const twoDTable = [];
@@ -174,14 +179,23 @@ export const Table = ({ table, tableName }) => {
                         }));
                         return;
                       }
-                      const rollGroupArr = [];
-                      const rollValueArr = [];
+                      let rollGroupArr = [];
+                      let rollValueArr = [];
 
-                      for (let i = 0; i < numRolls; i++) {
-                        rollGroupArr[i] = valI;
-                        rollValueArr[i] = rowI;
+                      if (!rollGroup || !rollValue) {
+                        for (let i = 0; i < numRolls; i++) {
+                          rollGroupArr[i] = valI;
+                          rollValueArr[i] = rowI;
+                        }
+                      } else {
+                        rollGroupArr = [...rollGroup];
+                        rollValueArr = [...rollValue];
                       }
 
+                      rollGroupArr[insertOrder] = valI;
+                      rollValueArr[insertOrder] = rowI;
+
+                      setInsertOrder((prev) => (prev + 1) % numRolls);
                       updateRolls(rollGroupArr, rollValueArr);
                     }}
                   >
