@@ -22,7 +22,7 @@ const Tag = ({ val, label, table, onClick }) => {
   );
 };
 
-export const generateMagicText = (result, onClickTag) => {
+export const generateMagicText = (result, onClickTag, onSave) => {
   if (!result[TABLE_NAMES.MAGIC_TABLE_ROLL]) {
     return null;
   }
@@ -63,7 +63,7 @@ export const generateMagicText = (result, onClickTag) => {
     )
     .join(", ");
 
-  return (
+  const jsxResult = (
     <div>
       <span className={styles["monster"]}>
         <b>
@@ -76,9 +76,16 @@ export const generateMagicText = (result, onClickTag) => {
       <span>{`An adventurer casting a spell called ${spellName} in a field`}</span>
     </div>
   );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
+    </div>
+  );
 };
 
-export const generateCharacterText = (result, onClickTag) => {
+export const generateCharacterText = (result, onClickTag, onSave) => {
   if (Object.keys(result).every((k) => k.indexOf("CHARACTER_") === -1)) {
     return null;
   }
@@ -111,7 +118,7 @@ export const generateCharacterText = (result, onClickTag) => {
   )}
 `;
 
-  return (
+  const jsxResult = (
     <div>
       <div className={styles["monster"]}>
         <b>
@@ -129,6 +136,13 @@ export const generateCharacterText = (result, onClickTag) => {
       </div>
       <br />
       <div>{descriptionText}</div>
+    </div>
+  );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
     </div>
   );
 };
@@ -160,7 +174,7 @@ export const generateCharacterText = (result, onClickTag) => {
 //   Tail: "with a ",
 //   Trunk: "with an elephant-like ",
 // };
-export const generateMonsterText = (result, onClickTag) => {
+export const generateMonsterText = (result, onClickTag, onSave) => {
   if (Object.keys(result).every((k) => k.indexOf("MONSTER_") === -1)) {
     return null;
   }
@@ -187,7 +201,7 @@ export const generateMonsterText = (result, onClickTag) => {
       .join(", ");
   });
 
-  return (
+  const jsxResult = (
     <div>
       <div className={styles["monster"]}>
         <b>
@@ -204,6 +218,13 @@ export const generateMonsterText = (result, onClickTag) => {
         ))}
       </div>
       {tables.map((t) => formattedMap[t]).join("; ")}
+    </div>
+  );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
     </div>
   );
 
@@ -269,7 +290,7 @@ export const generateMonsterText = (result, onClickTag) => {
   // );
 };
 
-export const generateNPCText = (result, onClickTag) => {
+export const generateNPCText = (result, onClickTag, onSave) => {
   const tables = PRESETS.NPC;
   if (Object.keys(result).every((k) => k.indexOf("NPC_") === -1)) {
     return null;
@@ -293,7 +314,7 @@ export const generateNPCText = (result, onClickTag) => {
     formattedMap[TABLE_NAMES.NPC_GOALS]
   }, but they're known to be ${formattedMap[TABLE_NAMES.NPC_LIABILITIES]}`;
 
-  return (
+  const jsxResult = (
     <div>
       <div className={styles["monster"]}>
         <b>
@@ -356,9 +377,16 @@ export const generateNPCText = (result, onClickTag) => {
       )}
     </div>
   );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
+    </div>
+  );
 };
 
-export const generateCityText = (result, onClickTag) => {
+export const generateCityText = (result, onClickTag, onSave) => {
   const tables = PRESETS.CITY;
   if (Object.keys(result).every((k) => k.indexOf("CITY_") === -1)) {
     return null;
@@ -367,7 +395,7 @@ export const generateCityText = (result, onClickTag) => {
   const formattedMap = {};
   tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
 
-  return (
+  const jsxResult = (
     <div>
       <div className={styles["monster"]}>
         <b>
@@ -383,6 +411,13 @@ export const generateCityText = (result, onClickTag) => {
           />
         ))}
       </div>
+    </div>
+  );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
     </div>
   );
 };

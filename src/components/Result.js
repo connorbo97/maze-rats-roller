@@ -15,7 +15,7 @@ const Tag = ({ val, label, table, onClick }) => {
   );
 };
 
-export const Result = ({ result, onClickTag, prefix, tables }) => {
+export const Result = ({ result, onClickTag, prefix, tables, onSave }) => {
   if (Object.keys(result).every((k) => k.indexOf(prefix) === -1)) {
     return null;
   }
@@ -23,7 +23,7 @@ export const Result = ({ result, onClickTag, prefix, tables }) => {
   const formattedMap = {};
   tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
 
-  return (
+  const jsxResult = (
     <div>
       <div className={styles["monster"]}>
         <b>
@@ -39,6 +39,13 @@ export const Result = ({ result, onClickTag, prefix, tables }) => {
           />
         ))}
       </div>
+    </div>
+  );
+
+  return (
+    <div className={styles["save-container"]}>
+      {jsxResult}
+      <button onClick={() => onSave(jsxResult)}>SAVE</button>
     </div>
   );
 };

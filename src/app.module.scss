@@ -71,6 +71,15 @@
   row-gap: 5px;
   > * {
     border-bottom: 1px dotted white;
+  }
+}
+
+.saved-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  > * {
     padding: 5px;
+    border-bottom: 1px dotted white;
   }
 }

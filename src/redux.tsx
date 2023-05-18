@@ -14,6 +14,7 @@ const BaseProvider = ReduxContext.Provider;
 export const useRedux = () => useContext(ReduxContext);
 
 export const ReduxContextProvider: any = ({ children }) => {
+  const [saved, setSaved] = useState([]);
   const [rollAll, setRollAll] = useState(0);
   const [tables, setTables] = useState([]);
   const [result, setResult] = useState({});
@@ -56,13 +57,17 @@ export const ReduxContextProvider: any = ({ children }) => {
       updateTables,
       updateResultByKey,
       updateForceRollByTable,
+      setSaved,
       result,
       tables,
       tablesSet: new Set(tables),
       rollAll,
       forceRoll,
+      saved,
     }),
     [
+      saved,
+      setSaved,
       forceRoll,
       result,
       rollAll,

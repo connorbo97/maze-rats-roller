@@ -16,6 +16,11 @@ import {
 } from "./descriptionUtils";
 import { Result } from "./components/Result";
 
+const PAGES = {
+  HOME: true,
+  SAVED: false,
+};
+
 const App = () => {
   const {
     updateRollAll,
@@ -25,6 +30,8 @@ const App = () => {
     updateTables,
     updateForceRollByTable,
   } = useRedux();
+  const [page, setPage] = useState(PAGES.HOME);
+  const { saved, setSaved } = useRedux();
   const [tableFilter, setTableFilter] = useState("");
   const onChangePreset = (e) => {
     updateTables(PRESETS[e.target.value]);
@@ -41,6 +48,10 @@ const App = () => {
       e.target.value = "";
     }
   };
+  const onAddSaved = (res) => {
+    const alertNote = prompt("Note about saved entry");
+    setSaved((prev) => [{ note: alertNote, jsx: res }, ...prev]);
+  };
 
   return (
     <div className={styles["app"]}>
@@ -49,6 +60,7 @@ const App = () => {
         <div className={styles["buttons"]}>
           <button onClick={updateRollAll}>Roll All</button>
           <button onClick={() => updateTables([])}>Clear Tables</button>
+          <button onClick={() => setPage((p) => !p)}>Toggle page</button>
           <select name="presets" id="presets" onChange={onChangePreset}>
             {Object.keys(PRESETS).map((preset) => (
               <option key={preset} value={preset}>
@@ -88,29 +100,50 @@ const App = () => {
             placeholder="Table Filter"
           />
         </div>
-        <div className={styles["result"]}>
-          {generateMagicText(result, updateForceRollByTable)}
-          {generateCharacterText(result, updateForceRollByTable)}
-          {generateMonsterText(result, updateForceRollByTable)}
-          {generateNPCText(result, updateForceRollByTable)}
-          {generateCityText(result, updateForceRollByTable)}
-          <Result
-            result={result}
-            onClickTag={updateForceRollByTable}
-            tables={PRESETS.DUNGEON}
-            prefix={"DUNGEON_"}
-          />
-        </div>
-        {!tables?.length && (
-          <div className={styles["help-text"]}>
-            Add a table or select a preset
+        {page === PAGES.SAVED && (
+          <div className={styles["saved-container"]}>
+            {saved.map(({ note, jsx }) => {
+              return (
+                <div>
+                  <div> {note}</div>
+                  {jsx}
+                </div>
+              );
+            })}
           </div>
         )}
-        <div className={styles["tables"]}>
-          {tables.map((t) => (
-            <Table table={TABLES[t].table} tableName={t} key={t} />
-          ))}
-        </div>
+        {page === PAGES.HOME && (
+          <>
+            <div className={styles["result"]}>
+              {generateMagicText(result, updateForceRollByTable, onAddSaved)}
+              {generateCharacterText(
+                result,
+                updateForceRollByTable,
+                onAddSaved
+              )}
+              {generateMonsterText(result, updateForceRollByTable, onAddSaved)}
+              {generateNPCText(result, updateForceRollByTable, onAddSaved)}
+              {generateCityText(result, updateForceRollByTable, onAddSaved)}
+              <Result
+                result={result}
+                onClickTag={updateForceRollByTable}
+                onSave={onAddSaved}
+                tables={PRESETS.DUNGEON}
+                prefix={"DUNGEON_"}
+              />
+            </div>
+            {!tables?.length && (
+              <div className={styles["help-text"]}>
+                Add a table or select a preset
+              </div>
+            )}
+            <div className={styles["tables"]}>
+              {tables.map((t) => (
+                <Table table={TABLES[t].table} tableName={t} key={t} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
