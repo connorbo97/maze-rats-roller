@@ -2255,6 +2255,7 @@ export const TABLES: { [s: string]: Table } = {
   },
   [TABLE_NAMES.DUNGEON_ROOMS]: {
     label: "Dungeon: Rooms",
+    defaultNumRolls: 5,
     table: {
       "1": [
         "Armory",

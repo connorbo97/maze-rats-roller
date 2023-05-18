@@ -19,6 +19,8 @@ const checkSelected = (rollGroup, rollValue, rowI, valI) => {
   );
 };
 
+const getDisableValuesKey = (r, c) => `${r}:${c}`;
+
 export const Table = ({ table, tableName }) => {
   const {
     rollAll,
@@ -31,6 +33,8 @@ export const Table = ({ table, tableName }) => {
   const initialRollAll = useRef(rollAll);
   const initialForceRoll = useRef(forceRollObj[tableName]);
   const [lock, setLock] = useState(false);
+  const [disableMode, setDisableMode] = useState(false);
+  const [disableValues, setDisableValues] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
   const [rollValue, setRollValue] = useState(null);
   const [numRolls, setNumRolls] = useState(
@@ -74,14 +78,21 @@ export const Table = ({ table, tableName }) => {
     const newRollGroup = [];
     const newRollValue = [];
     for (let i = 0; i < numRolls; i++) {
-      newRollGroup[i] = Math.floor(Math.random() * Object.keys(table).length);
-      newRollValue[i] = Math.floor(
-        Math.random() * table[Object.keys(table)[newRollGroup[i]]].length
-      );
+      do {
+        newRollGroup[i] = Math.floor(Math.random() * Object.keys(table).length);
+        newRollValue[i] = Math.floor(
+          Math.random() * table[Object.keys(table)[newRollGroup[i]]].length
+        );
+
+        if (
+          !disableValues[getDisableValuesKey(newRollValue[i], newRollGroup[i])]
+        )
+          break;
+      } while (true);
     }
 
     updateRolls(newRollGroup, newRollValue);
-  }, [lock, numRolls, table, updateRolls]);
+  }, [disableValues, lock, numRolls, table, updateRolls]);
 
   const onDelete = () => {
     updateTables(tables.filter((t) => t !== tableName));
@@ -99,13 +110,20 @@ export const Table = ({ table, tableName }) => {
       onRoll();
     }
   }, [rollAll, onRoll, forceRoll, initialForceRoll]);
-
+  console.log(disableValues);
   return (
     <div className={styles["container"]}>
       <div className={styles["head"]}>
         <b>{getTableLabel(tableName)}</b>
         <button onClick={onRoll}>Roll</button>
         <button onClick={onDelete}>Delete</button>
+        <button
+          onClick={() => setDisableMode((m) => !m)}
+          className={classNameBuilder({ disabling: disableMode })}
+        >
+          {disableMode ? "Disable Mode" : "Select Mode"}
+        </button>
+        <button onClick={() => setDisableValues({})}>Clear disable</button>
         <button
           onClick={() => setLock((l) => !l)}
           className={classNameBuilder({ locked: lock })}
@@ -145,8 +163,17 @@ export const Table = ({ table, tableName }) => {
                     className={classNameBuilder({
                       selected: checkSelected(rollGroup, rollValue, rowI, valI),
                       "selected-group": has(rollGroup, valI),
+                      disabled: disableValues[getDisableValuesKey(rowI, valI)],
                     })}
                     onClick={() => {
+                      if (disableMode) {
+                        setDisableValues((prev) => ({
+                          ...prev,
+                          [getDisableValuesKey(rowI, valI)]:
+                            !prev[getDisableValuesKey(rowI, valI)],
+                        }));
+                        return;
+                      }
                       const rollGroupArr = [];
                       const rollValueArr = [];
 
