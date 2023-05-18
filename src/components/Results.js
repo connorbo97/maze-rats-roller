@@ -48,7 +48,7 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         onClickTag={onClickTag}
         onSave={onAddSaved}
         tables={PRESETS.NAMES}
-        shouldRender={allMatchShouldRenderFunc}
+        shouldRender={prefixMatchShouldRenderFunc("NAME_")}
         renderBottomText={renderNameBottomText}
       />
       <Result

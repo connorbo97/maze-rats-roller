@@ -1,9 +1,30 @@
 import { TABLES, TABLE_NAMES } from "./constants";
 import styles from "./descriptionUtils.module.scss";
-import { uniq, values } from "lodash";
+import { flatten, uniq, values } from "lodash";
 
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
+
+const calcTableNameFromTableRollValue = (
+  tableRollValue,
+  defaultTable = TABLE_NAMES.MAGIC_ETHEREAL_FORMS
+) => {
+  switch (tableRollValue) {
+    case "Physical Effect":
+      return TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS;
+    case "Physical Element":
+      return TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS;
+    case "Physical Form":
+      return TABLE_NAMES.MAGIC_PHYSICAL_FORMS;
+    case "Ethereal Effect":
+      return TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS;
+    case "Ethereal Element":
+      return TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS;
+    case "Ethereal Form":
+    default:
+      return defaultTable;
+  }
+};
 
 export const generateMagicText = (result, onClickTag, onSave) => {
   if (!result[TABLE_NAMES.MAGIC_TABLE_ROLL]) {
@@ -12,24 +33,6 @@ export const generateMagicText = (result, onClickTag, onSave) => {
   const values = result[TABLE_NAMES.MAGIC_TABLE_ROLL].map((v) =>
     v.split(" + ")
   );
-
-  const calcTableNameFromTableRollValue = (tableRollValue) => {
-    switch (tableRollValue) {
-      case "Physical Effect":
-        return TABLE_NAMES.MAGIC_PHYSICAL_EFFECTS;
-      case "Physical Element":
-        return TABLE_NAMES.MAGIC_PHYSICAL_ELEMENTS;
-      case "Physical Form":
-        return TABLE_NAMES.MAGIC_PHYSICAL_FORMS;
-      case "Ethereal Effect":
-        return TABLE_NAMES.MAGIC_ETHEREAL_EFFECTS;
-      case "Ethereal Element":
-        return TABLE_NAMES.MAGIC_ETHEREAL_ELEMENTS;
-      case "Ethereal Form":
-      default:
-        return TABLE_NAMES.MAGIC_ETHEREAL_FORMS;
-    }
-  };
 
   const spellName = values
     .map((v) =>
@@ -222,14 +225,47 @@ const permutations = (collection, n) => {
   return recur(array, n);
 };
 
-export const renderNameBottomText = (formattedMap, tables) => {
-  const arr = tables.map((t) => formattedMap[t]).filter((v) => v);
+export const renderNameBottomText = (formattedMap, _, result) => {
+  const tables = [
+    TABLE_NAMES.NAME_MALE_NAME,
+    TABLE_NAMES.NAME_FEMALE_NAME,
+    TABLE_NAMES.NAME_UPPER_CLASS_LAST_NAME,
+    TABLE_NAMES.NAME_LOWER_CLASS_LAST_NAME,
+  ];
+  const arr = tables
+    .map((t) =>
+      t === TABLE_NAMES.NAME_NICKNAME && formattedMap[t]
+        ? `"${formattedMap[t]}"`
+        : formattedMap[t]
+    )
+    .filter((v) => v);
   const perms = permutations(arr, 2);
-  const text = perms.map((p) => p.join(" ")).join(" | ");
+  const allNames = perms.map((p) => p.join(" "));
+  let nickNamedArr = [];
+  if (formattedMap[TABLE_NAMES.NAME_NICKNAME]) {
+    const nickNames = result[TABLE_NAMES.NAME_NICKNAME].map((n) =>
+      calcTableNameFromTableRollValue(n, null)
+        ? formattedMap[calcTableNameFromTableRollValue(n, null)]
+        : n
+    );
+
+    nickNamedArr = flatten(
+      nickNames.map((n) => perms.map((p) => p.join(` "${n}" `)))
+    );
+  }
+  const text = allNames.join(" | ");
+  const nickNamedText = nickNamedArr.join(" | ");
   return (
     <div>
       <br />
-      {text}
+      <div>{text}</div>
+
+      {nickNamedText && (
+        <>
+          <br />
+          <div>{nickNamedText}</div>
+        </>
+      )}
     </div>
   );
 };

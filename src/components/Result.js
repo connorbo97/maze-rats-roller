@@ -21,7 +21,7 @@ export const allMatchShouldRenderFunc = (result, tables) =>
 export const partialShouldRenderFunc = (result, tables) =>
   intersection(Object.keys(result), tables).length > 0;
 export const prefixMatchShouldRenderFunc = (prefix) => (result, tables) =>
-  Object.keys(result).find((v) => v.indexOf(prefix) !== -1);
+  Object.keys(result).find((v) => v.indexOf(prefix) === 0);
 const defaultShouldRenderFunc = partialShouldRenderFunc;
 const defaultRenderBottomText = (formattedMap, tables) => (
   <div>
@@ -72,7 +72,7 @@ export const Result = ({
           />
         ))}
       </div>
-      {renderBottomText(formattedMap, tables)}
+      {renderBottomText(formattedMap, tables, result)}
     </div>
   );
 

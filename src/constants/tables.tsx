@@ -54,6 +54,7 @@ export const TABLE_NAMES = {
   NAME_MALE_NAME: "NAME_MALE_NAME",
   NAME_UPPER_CLASS_LAST_NAME: "NAME_UPPER_CLASS_LAST_NAME",
   NAME_LOWER_CLASS_LAST_NAME: "NAME_LOWER_CLASS_LAST_NAME",
+  NAME_NICKNAME: "NAME_NICKNAME",
 
   CITY_THEMES: "CITY_THEMES",
   CITY_EVENTS: "CITY_EVENTS",
@@ -1293,6 +1294,24 @@ export const TABLES: { [s: string]: Table } = {
         "Skitter",
       ],
       "6": ["Slee", "Slitherly", "Stoker", "Tarwater", "Tumbler", "Villin"],
+    },
+  },
+  [TABLE_NAMES.NAME_NICKNAME]: {
+    label: "Name: Nickname",
+    table: {
+      "1": ["Grim", "Hog", "Nobody", "Danger", "Jester", "Butcher"],
+      "2": ["Hound", "Fierce", "Champ", "Killer", "Tweaker", "Puffer"],
+      "3": ["Scalpel", "Lumps", "Spoon", "Rambler", "Slug", "Porky"],
+      "4": ["Cookie", "Buster", "Shade", "Family member", "Mugs", "Chef"],
+      "5": ["Bull", "Babe", "Animal type", "Glide", "Gemstone", "Doc"],
+      "6": [
+        "Belle",
+        "Skip",
+        "Lucky",
+        "Buddy",
+        "Physical Element",
+        "Ethereal Element",
+      ],
     },
   },
   [TABLE_NAMES.NPC_ASSETS]: {
