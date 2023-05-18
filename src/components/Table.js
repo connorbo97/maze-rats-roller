@@ -115,7 +115,7 @@ export const Table = ({ table, tableName }) => {
       onRoll();
     }
   }, [rollAll, onRoll, forceRoll, initialForceRoll]);
-  console.log(disableValues);
+
   return (
     <div className={styles["container"]}>
       <div className={styles["head"]}>

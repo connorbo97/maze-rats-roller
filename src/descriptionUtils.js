@@ -5,7 +5,7 @@ import {
 } from "./constants";
 import { PRESETS } from "./constants/presets";
 import styles from "./descriptionUtils.module.scss";
-import { uniq } from "lodash";
+import { intersection, uniq } from "lodash";
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
 
@@ -175,11 +175,10 @@ export const generateCharacterText = (result, onClickTag, onSave) => {
 //   Trunk: "with an elephant-like ",
 // };
 export const generateMonsterText = (result, onClickTag, onSave) => {
-  if (Object.keys(result).every((k) => k.indexOf("MONSTER_") === -1)) {
+  const tables = PRESETS.MONSTER;
+  if (intersection(Object.keys(result), tables).length === 0) {
     return null;
   }
-
-  const tables = PRESETS.MONSTER;
 
   const formattedMap = {};
   tables.forEach((t) => {

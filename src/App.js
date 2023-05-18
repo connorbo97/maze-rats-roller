@@ -15,6 +15,7 @@ import {
   generateNPCText,
 } from "./descriptionUtils";
 import { Result } from "./components/Result";
+import { Results } from "./components/Results";
 import { noop } from "lodash";
 
 const PAGES = {
@@ -125,17 +126,10 @@ const App = () => {
             {history.map((h) => (
               <>
                 <div className={styles["result"]}>
-                  {generateMagicText(h, noop, onAddSaved)}
-                  {generateCharacterText(h, noop, onAddSaved)}
-                  {generateMonsterText(h, noop, onAddSaved)}
-                  {generateNPCText(h, noop, onAddSaved)}
-                  {generateCityText(h, noop, onAddSaved)}
-                  <Result
+                  <Results
                     result={h}
+                    onAddSaved={onAddSaved}
                     onClickTag={noop}
-                    onSave={onAddSaved}
-                    tables={PRESETS.DUNGEON}
-                    prefix={"DUNGEON_"}
                   />
                 </div>
                 <div
@@ -164,21 +158,10 @@ const App = () => {
         {page === PAGES.HOME && (
           <>
             <div className={styles["result"]}>
-              {generateMagicText(result, updateForceRollByTable, onAddSaved)}
-              {generateCharacterText(
-                result,
-                updateForceRollByTable,
-                onAddSaved
-              )}
-              {generateMonsterText(result, updateForceRollByTable, onAddSaved)}
-              {generateNPCText(result, updateForceRollByTable, onAddSaved)}
-              {generateCityText(result, updateForceRollByTable, onAddSaved)}
-              <Result
+              <Results
                 result={result}
+                onAddSaved={onAddSaved}
                 onClickTag={updateForceRollByTable}
-                onSave={onAddSaved}
-                tables={PRESETS.DUNGEON}
-                prefix={"DUNGEON_"}
               />
             </div>
             {!tables?.length && (

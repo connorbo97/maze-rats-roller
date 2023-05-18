@@ -55,7 +55,6 @@ export const ReduxContextProvider: any = ({ children }) => {
 
   useEffect(() => {
     setHistory((p) => {
-      console.log(result, p);
       return [result, ...p];
     });
   }, [result]);

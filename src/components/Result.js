@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./result.module.scss";
 import { TABLES } from "../constants";
+import { intersection } from "lodash";
+import { useRedux } from "../redux";
 
 const Tag = ({ val, label, table, onClick }) => {
   if (!val) {
@@ -15,8 +17,25 @@ const Tag = ({ val, label, table, onClick }) => {
   );
 };
 
-export const Result = ({ result, onClickTag, prefix, tables, onSave }) => {
-  if (Object.keys(result).every((k) => k.indexOf(prefix) === -1)) {
+const defaultShouldRenderFunc = (result, tables) =>
+  intersection(Object.keys(result), tables).length === tables.length;
+
+export const Result = ({
+  result,
+  label,
+  onClickTag,
+  tables,
+  onSave,
+  shouldRender = defaultShouldRenderFunc,
+}) => {
+  console.log(
+    label,
+    result,
+    tables,
+    shouldRender(result, tables),
+    intersection(Object.keys(result), tables).length
+  );
+  if (!shouldRender(result, tables)) {
     return null;
   }
 
@@ -27,7 +46,7 @@ export const Result = ({ result, onClickTag, prefix, tables, onSave }) => {
     <div>
       <div className={styles["monster"]}>
         <b>
-          <u>City</u>
+          <u>{label}</u>
         </b>
         <br />
         {tables.map((t) => (
