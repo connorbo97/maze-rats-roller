@@ -15,10 +15,17 @@ import {
   generateNPCText,
 } from "./descriptionUtils";
 import { Result } from "./components/Result";
+import { noop } from "lodash";
 
 const PAGES = {
-  HOME: true,
-  SAVED: false,
+  HOME: 0,
+  SAVED: 1,
+  HISTORY: 2,
+};
+const PAGE_TO_NAME = {
+  [PAGES.HOME]: "Maze Rats Table Roller",
+  [PAGES.SAVED]: "Saved Rolls",
+  [PAGES.HISTORY]: "Historical Rolls",
 };
 
 const App = () => {
@@ -31,7 +38,7 @@ const App = () => {
     updateForceRollByTable,
   } = useRedux();
   const [page, setPage] = useState(PAGES.HOME);
-  const { saved, setSaved } = useRedux();
+  const { saved, setSaved, history, setHistory } = useRedux();
   const [tableFilter, setTableFilter] = useState("");
   const onChangePreset = (e) => {
     updateTables(PRESETS[e.target.value]);
@@ -56,50 +63,92 @@ const App = () => {
   return (
     <div className={styles["app"]}>
       <div className={styles["content"]}>
-        <h1>Maze Rats Table Roller</h1>
+        <h1>{PAGE_TO_NAME[page]}</h1>
         <div className={styles["buttons"]}>
-          <button onClick={updateRollAll}>Roll All</button>
-          <button onClick={() => updateTables([])}>Clear Tables</button>
-          <button onClick={() => setPage((p) => !p)}>Toggle page</button>
-          <select name="presets" id="presets" onChange={onChangePreset}>
-            {Object.keys(PRESETS).map((preset) => (
-              <option key={preset} value={preset}>
-                {PRESET_LABELS[preset] || preset}
-              </option>
-            ))}
-          </select>
-          <select onChange={onAddPreset}>
-            <option value="">Add a preset</option>
-            {Object.keys(PRESETS)
-              .filter((v) => v)
-              .map((preset) => (
-                <option key={preset} value={preset}>
-                  {PRESET_LABELS[preset] || preset}
-                </option>
-              ))}
-          </select>
-          <select onChange={onAddTable}>
-            <option value="">Add a table</option>
-            {Object.keys(TABLE_NAMES)
-              .filter(
-                (table) =>
-                  !tablesSet.has(table) &&
-                  getTableLabel(table)
-                    .toLowerCase()
-                    .indexOf(tableFilter.toLowerCase()) !== -1
-              )
-              .map((table) => (
-                <option key={table} value={table}>
-                  {getTableLabel(table)}
-                </option>
-              ))}
-          </select>
-          <input
-            value={tableFilter}
-            onChange={(e) => setTableFilter(e.target.value)}
-            placeholder="Table Filter"
-          />
+          {page === PAGES.HOME && (
+            <>
+              <button onClick={updateRollAll}>Roll All</button>
+              <button onClick={() => updateTables([])}>Clear Tables</button>
+            </>
+          )}
+          <button
+            onClick={() => setPage((p) => (p + 1) % Object.keys(PAGES).length)}
+          >
+            Toggle page
+          </button>
+          {page === PAGES.HOME && (
+            <>
+              <select name="presets" id="presets" onChange={onChangePreset}>
+                {Object.keys(PRESETS).map((preset) => (
+                  <option key={preset} value={preset}>
+                    {PRESET_LABELS[preset] || preset}
+                  </option>
+                ))}
+              </select>
+              <select onChange={onAddPreset}>
+                <option value="">Add a preset</option>
+                {Object.keys(PRESETS)
+                  .filter((v) => v)
+                  .map((preset) => (
+                    <option key={preset} value={preset}>
+                      {PRESET_LABELS[preset] || preset}
+                    </option>
+                  ))}
+              </select>
+              <select onChange={onAddTable}>
+                <option value="">Add a table</option>
+                {Object.keys(TABLE_NAMES)
+                  .filter(
+                    (table) =>
+                      !tablesSet.has(table) &&
+                      getTableLabel(table)
+                        .toLowerCase()
+                        .indexOf(tableFilter.toLowerCase()) !== -1
+                  )
+                  .map((table) => (
+                    <option key={table} value={table}>
+                      {getTableLabel(table)}
+                    </option>
+                  ))}
+              </select>
+              <input
+                value={tableFilter}
+                onChange={(e) => setTableFilter(e.target.value)}
+                placeholder="Table Filter"
+              />
+            </>
+          )}
         </div>
+        {page === PAGES.HISTORY && (
+          <div>
+            <button onClick={() => setHistory([])}>Clear History</button>
+            {history.map((h) => (
+              <>
+                <div className={styles["result"]}>
+                  {generateMagicText(h, noop, onAddSaved)}
+                  {generateCharacterText(h, noop, onAddSaved)}
+                  {generateMonsterText(h, noop, onAddSaved)}
+                  {generateNPCText(h, noop, onAddSaved)}
+                  {generateCityText(h, noop, onAddSaved)}
+                  <Result
+                    result={h}
+                    onClickTag={noop}
+                    onSave={onAddSaved}
+                    tables={PRESETS.DUNGEON}
+                    prefix={"DUNGEON_"}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "10px",
+                    backgroundColor: "white",
+                  }}
+                />
+              </>
+            ))}
+          </div>
+        )}
         {page === PAGES.SAVED && (
           <div className={styles["saved-container"]}>
             {saved.map(({ note, jsx }) => {

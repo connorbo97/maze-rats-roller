@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -16,6 +17,7 @@ export const useRedux = () => useContext(ReduxContext);
 export const ReduxContextProvider: any = ({ children }) => {
   const [saved, setSaved] = useState([]);
   const [rollAll, setRollAll] = useState(0);
+  const [history, setHistory] = useState([]);
   const [tables, setTables] = useState([]);
   const [result, setResult] = useState({});
   const [forceRoll, setForceRoll] = useState({});
@@ -51,6 +53,13 @@ export const ReduxContextProvider: any = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setHistory((p) => {
+      console.log(result, p);
+      return [result, ...p];
+    });
+  }, [result]);
+
   const value = useMemo(
     () => ({
       updateRollAll,
@@ -64,10 +73,14 @@ export const ReduxContextProvider: any = ({ children }) => {
       rollAll,
       forceRoll,
       saved,
+      history,
+      setHistory,
     }),
     [
       saved,
       setSaved,
+      history,
+      setHistory,
       forceRoll,
       result,
       rollAll,
