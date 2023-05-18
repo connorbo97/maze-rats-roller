@@ -14,6 +14,7 @@ import {
   generateMonsterText,
   generateNPCText,
 } from "./descriptionUtils";
+import { Result } from "./components/Result";
 
 const App = () => {
   const {
@@ -93,6 +94,12 @@ const App = () => {
           {generateMonsterText(result, updateForceRollByTable)}
           {generateNPCText(result, updateForceRollByTable)}
           {generateCityText(result, updateForceRollByTable)}
+          <Result
+            result={result}
+            onClickTag={updateForceRollByTable}
+            tables={PRESETS.DUNGEON}
+            prefix={"DUNGEON_"}
+          />
         </div>
         {!tables?.length && (
           <div className={styles["help-text"]}>
