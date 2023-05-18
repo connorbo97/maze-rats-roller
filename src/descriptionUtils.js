@@ -177,15 +177,14 @@ export const generateMonsterText = (result, onClickTag, onSave) => {
 };
 
 export const renderNPCBottomText = (formattedMap) => {
-  const civilTextPrefix = `a full body shot of a fantasy themed  ${
-    formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION]
-  }`;
-  const underworldTextPrefix = `a full body shot of a fantasy themed ${
-    formattedMap[TABLE_NAMES.NPC_OCCUPATION_UNDERWORLD]
-  }`;
-  const wildernessTextPrefix = `a full body shot of a fantasy themed ${
-    formattedMap[TABLE_NAMES.NPC_OCCUPATION_WILDERNESS]
-  }`;
+  const job = [
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION],
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_UNDERWORLD],
+    formattedMap[TABLE_NAMES.NPC_OCCUPATION_WILDERNESS],
+  ]
+    .filter((v) => v)
+    .join("/");
+  const prefix = `a full body shot of a fantasy themed  ${job || "NPC"}`;
 
   const restOfText = ` who was ${
     formattedMap[TABLE_NAMES.NPC_MISFORTUNES]
@@ -195,24 +194,7 @@ export const renderNPCBottomText = (formattedMap) => {
   return (
     <>
       <br />
-      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION] && (
-        <>
-          <br />
-          <div>{`${civilTextPrefix}${restOfText}`}</div>
-        </>
-      )}
-      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_UNDERWORLD] && (
-        <>
-          <br />
-          <div>{`${underworldTextPrefix}${restOfText}`}</div>
-        </>
-      )}
-      {formattedMap[TABLE_NAMES.NPC_OCCUPATION_WILDERNESS] && (
-        <>
-          <br />
-          <div>{`${wildernessTextPrefix}${restOfText}`}</div>
-        </>
-      )}
+      <div>{`${prefix}${restOfText}`}</div>
     </>
   );
 };
