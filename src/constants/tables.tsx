@@ -43,16 +43,17 @@ export const TABLE_NAMES = {
   NPC_OCCUPATION_CIVILIZATION: "NPC_OCCUPATION_CIVILIZATION",
   NPC_OCCUPATION_UNDERWORLD: "NPC_OCCUPATION_UNDERWORLD",
   NPC_OCCUPATION_WILDERNESS: "NPC_OCCUPATION_WILDERNESS",
-  NPC_FEMALE_NAME: "NPC_FEMALE_NAME",
-  NPC_MALE_NAME: "NPC_MALE_NAME",
-  NPC_UPPER_CLASS_LAST_NAME: "NPC_UPPER_CLASS_LAST_NAME",
-  NPC_LOWER_CLASS_LAST_NAME: "NPC_LOWER_CLASS_LAST_NAME",
   NPC_ASSETS: "NPC_ASSETS",
   NPC_LIABILITIES: "NPC_LIABILITIES",
   NPC_GOALS: "NPC_GOALS",
   NPC_MISFORTUNES: "NPC_MISFORTUNES",
   NPC_MISSIONS: "NPC_MISSIONS",
   NPC_REPUTATIONS: "NPC_REPUTATIONS",
+
+  NAME_FEMALE_NAME: "NAME_FEMALE_NAME",
+  NAME_MALE_NAME: "NAME_MALE_NAME",
+  NAME_UPPER_CLASS_LAST_NAME: "NAME_UPPER_CLASS_LAST_NAME",
+  NAME_LOWER_CLASS_LAST_NAME: "NAME_LOWER_CLASS_LAST_NAME",
 
   CITY_THEMES: "CITY_THEMES",
   CITY_EVENTS: "CITY_EVENTS",
@@ -1194,8 +1195,8 @@ export const TABLES: { [s: string]: Table } = {
       ],
     },
   },
-  [TABLE_NAMES.NPC_FEMALE_NAME]: {
-    label: "NPC: Female Name",
+  [TABLE_NAMES.NAME_FEMALE_NAME]: {
+    label: "Name: Female Name",
     table: {
       "1": ["Adelaide", "Alma", "Barsaba", "Beatrix", "Bianca", "Cleopha"],
       "2": ["Clover", "Constance", "Damaris", "Daphne", "Demona", "Elsbeth"],
@@ -1205,8 +1206,8 @@ export const TABLES: { [s: string]: Table } = {
       "6": ["Trillby", "Tuesday", "Ursula", "Vivian", "Wendy", "Zora"],
     },
   },
-  [TABLE_NAMES.NPC_MALE_NAME]: {
-    label: "NPC: Male Name",
+  [TABLE_NAMES.NAME_MALE_NAME]: {
+    label: "Name: Male Name",
     table: {
       "1": ["Balthazar", "Basil", "Bertram", "Blaxton", "Chadwick", "Clovis"],
       "2": ["Destrian", "Ellis", "Erasmus", "Faustus", "Finn", "Fitzhugh"],
@@ -1223,8 +1224,8 @@ export const TABLES: { [s: string]: Table } = {
       "6": ["Silas", "Stilton", "Stratford", "Tenpiece", "Waverly", "Webster"],
     },
   },
-  [TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME]: {
-    label: "NPC: Upper Class Last Name",
+  [TABLE_NAMES.NAME_UPPER_CLASS_LAST_NAME]: {
+    label: "Name: Upper Class Last Name",
     table: {
       "1": ["Belvedere", "Bithesea", "Calaver", "Carvolo", "De Rippe", "Droll"],
       "2": ["Dunlow", "Edevane", "Erelong", "Febland", "Fernsby", "Fisk"],
@@ -1262,8 +1263,8 @@ export const TABLES: { [s: string]: Table } = {
       ],
     },
   },
-  [TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME]: {
-    label: "NPC: Lower Class Last Name",
+  [TABLE_NAMES.NAME_LOWER_CLASS_LAST_NAME]: {
+    label: "Name: Lower Class Last Name",
     table: {
       "1": [
         "Barrow",

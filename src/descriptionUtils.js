@@ -1,6 +1,6 @@
 import { TABLES, TABLE_NAMES } from "./constants";
 import styles from "./descriptionUtils.module.scss";
-import { uniq } from "lodash";
+import { uniq, values } from "lodash";
 
 const getCSVText = (val, prefix = "", suffix = "", first = false) =>
   val ? `${first ? "" : ", "}${prefix}${val}${suffix}` : "";
@@ -195,32 +195,6 @@ export const renderNPCBottomText = (formattedMap) => {
   return (
     <>
       <br />
-      <span>
-        <b>
-          <u>NAMES</u>{" "}
-        </b>
-        {formattedMap[TABLE_NAMES.NPC_MALE_NAME] &&
-          formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME] &&
-          `${formattedMap[TABLE_NAMES.NPC_MALE_NAME]} ${
-            formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME]
-          } | `}
-        {formattedMap[TABLE_NAMES.NPC_FEMALE_NAME] &&
-          formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME] &&
-          `${formattedMap[TABLE_NAMES.NPC_FEMALE_NAME]} ${
-            formattedMap[TABLE_NAMES.NPC_LOWER_CLASS_LAST_NAME]
-          } | `}
-        {formattedMap[TABLE_NAMES.NPC_MALE_NAME] &&
-          formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME] &&
-          `${formattedMap[TABLE_NAMES.NPC_MALE_NAME]} ${
-            formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME]
-          } | `}
-        {formattedMap[TABLE_NAMES.NPC_FEMALE_NAME] &&
-          formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME] &&
-          `${formattedMap[TABLE_NAMES.NPC_FEMALE_NAME]} ${
-            formattedMap[TABLE_NAMES.NPC_UPPER_CLASS_LAST_NAME]
-          } | `}
-      </span>
-      <br />
       {formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION] && (
         <>
           <br />
@@ -240,5 +214,40 @@ export const renderNPCBottomText = (formattedMap) => {
         </>
       )}
     </>
+  );
+};
+
+const permutations = (collection, n) => {
+  let array = values(collection);
+  if (array.length < n) {
+    return [];
+  }
+  let recur = (array, n) => {
+    if (--n < 0) {
+      return [[]];
+    }
+    let permutations = [];
+    array.forEach((value, index, array) => {
+      array = array.slice();
+      array.splice(index, 1);
+      recur(array, n).forEach((permutation) => {
+        permutation.unshift(value);
+        permutations.push(permutation);
+      });
+    });
+    return permutations;
+  };
+  return recur(array, n);
+};
+
+export const renderNameBottomText = (formattedMap, tables) => {
+  const arr = tables.map((t) => formattedMap[t]).filter((v) => v);
+  const perms = permutations(arr, 2);
+  const text = perms.map((p) => p.join(" ")).join(" | ");
+  return (
+    <div>
+      <br />
+      {text}
+    </div>
   );
 };
