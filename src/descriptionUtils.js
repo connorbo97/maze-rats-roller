@@ -297,7 +297,7 @@ export const generateNPCText = (result, onClickTag, onSave) => {
   }
 
   const formattedMap = {};
-  tables.forEach((t) => (formattedMap[t] = result[t]));
+  tables.forEach((t) => (formattedMap[t] = (result[t] || []).join(", ")));
   const civilTextPrefix = `a full body shot of a fantasy themed  ${
     formattedMap[TABLE_NAMES.NPC_OCCUPATION_CIVILIZATION]
   }`;
