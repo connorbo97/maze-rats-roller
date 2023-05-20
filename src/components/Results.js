@@ -3,7 +3,6 @@ import {
   generateMagicText,
   renderCharacterBottomText,
   renderNPCBottomText,
-  renderNameBottomText,
 } from "../descriptionUtils";
 import { PRESETS, PRESET_LABELS } from "../constants/presets";
 import {
@@ -42,15 +41,7 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         renderBottomText={renderNPCBottomText}
         shouldRender={prefixMatchShouldRenderFunc("NPC_")}
       />
-      <Result
-        result={result}
-        label={PRESET_LABELS.NAMES}
-        onClickTag={onClickTag}
-        onSave={onAddSaved}
-        tables={PRESETS.NAMES}
-        shouldRender={prefixMatchShouldRenderFunc("NAME_")}
-        renderBottomText={renderNameBottomText}
-      />
+
       <Result
         result={result}
         label={PRESET_LABELS.CITY}
@@ -90,6 +81,14 @@ export const Results = ({ result, onAddSaved, onClickTag }) => {
         onSave={onAddSaved}
         tables={PRESETS.CATASTROPHES}
         shouldRender={allMatchShouldRenderFunc}
+      />
+      <Result
+        result={result}
+        label={PRESET_LABELS.ITEM}
+        onClickTag={onClickTag}
+        onSave={onAddSaved}
+        tables={PRESETS.ITEM}
+        shouldRender={prefixMatchShouldRenderFunc("ITEM_")}
       />
     </>
   );

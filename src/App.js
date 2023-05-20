@@ -7,14 +7,6 @@ import { getTableLabel } from "./constants/tables";
 import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
-import {
-  generateCharacterText,
-  generateCityText,
-  generateMagicText,
-  generateMonsterText,
-  generateNPCText,
-} from "./descriptionUtils";
-import { Result } from "./components/Result";
 import { Results } from "./components/Results";
 import { noop } from "lodash";
 
@@ -60,6 +52,7 @@ const App = () => {
     const alertNote = prompt("Note about saved entry");
     setSaved((prev) => [{ note: alertNote, jsx: res }, ...prev]);
   };
+  console.log(tables, TABLES);
 
   return (
     <div className={styles["app"]}>
