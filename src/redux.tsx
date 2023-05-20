@@ -27,6 +27,7 @@ export const ReduxContextProvider: any = ({ children }) => {
   const [tables, setTables] = useState([]);
   const [result, setResult] = useState({});
   const [forceRoll, setForceRoll] = useState({});
+  const [lockedTables, setLockedTables] = useState({});
 
   const updateForceRollByTable = useCallback((t) => {
     setForceRoll((prev) => {
@@ -59,6 +60,10 @@ export const ReduxContextProvider: any = ({ children }) => {
       setResult((old) => ({ ...old, [k]: value }));
     }
   }, []);
+  const toggleLockedTable = useCallback(
+    (t) => setLockedTables((prev) => ({ ...prev, [t]: !prev[t] })),
+    []
+  );
 
   useEffect(() => {
     localStorage.setItem(SAVED_LOCAL_STORAGE_KEY, JSON.stringify(saved));
@@ -86,6 +91,9 @@ export const ReduxContextProvider: any = ({ children }) => {
       saved,
       history,
       setHistory,
+      lockedTables,
+      setLockedTables,
+      toggleLockedTable,
     }),
     [
       setResult,
@@ -101,6 +109,9 @@ export const ReduxContextProvider: any = ({ children }) => {
       updateResultByKey,
       updateRollAll,
       updateTables,
+      lockedTables,
+      setLockedTables,
+      toggleLockedTable,
     ]
   );
 

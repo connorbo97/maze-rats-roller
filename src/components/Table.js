@@ -28,11 +28,13 @@ export const Table = ({ table, tableName }) => {
     updateTables,
     tables,
     forceRoll: forceRollObj,
+    lockedTables,
+    toggleLockedTable,
   } = useRedux();
   const forceRoll = forceRollObj[tableName] || 0;
   const rollAllRef = useRef(rollAll);
   const forceRollRef = useRef(forceRoll);
-  const [lock, setLock] = useState(false);
+  const lock = !!lockedTables[tableName];
   const [disableMode, setDisableMode] = useState(false);
   const [disableValues, setDisableValues] = useState(false);
   const [rollGroup, setRollGroup] = useState(null);
@@ -131,7 +133,7 @@ export const Table = ({ table, tableName }) => {
           <button onClick={() => setDisableValues({})}>Clear disabled</button>
         )}
         <button
-          onClick={() => setLock((l) => !l)}
+          onClick={() => toggleLockedTable(tableName)}
           className={classNameBuilder({ locked: lock })}
         >
           {lock ? "Unlock" : "Lock"}
