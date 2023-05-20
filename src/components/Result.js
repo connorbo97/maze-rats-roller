@@ -21,7 +21,8 @@ const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text);
 };
 
-const Cell = ({ val, label, onClick, onDeleteTable }) => {
+const Cell = ({ val, label, onClick, onDeleteTable, table }) => {
+  const { lockedTables, toggleLockedTable } = useRedux();
   if (!val) {
     return null;
   }
@@ -31,6 +32,16 @@ const Cell = ({ val, label, onClick, onDeleteTable }) => {
       <div className={styles["cell-header"]}>
         <span>{label}</span>
         <div className={styles["btn-container"]}>
+          {onClick && (
+            <button
+              className={classNameBuilder("roll-btn", {
+                locked: lockedTables[table],
+              })}
+              onClick={() => toggleLockedTable(table)}
+            >
+              {lockedTables[table] ? "U" : "L"}
+            </button>
+          )}
           {onClick && (
             <button className={styles["roll-btn"]} onClick={onClick}>
               &#9851;
@@ -116,6 +127,7 @@ export const Result = ({
           <Cell
             label={TABLES[t].label.split(": ")[1]}
             val={formattedMap[t]}
+            table={t}
             onClick={onClickTag && (() => onClickTag(t))}
             onDeleteTable={
               onClickTag &&

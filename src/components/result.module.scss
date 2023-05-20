@@ -41,7 +41,7 @@
     border-width: 1px 1px 1px 0px;
     border-style: solid;
     border-color: white;
-    width: 210px;
+    width: 250px;
 
     &:first-child {
         border-width: 1px 1px 1px 1px;
@@ -65,7 +65,8 @@
     color: white;
 }
 .roll-btn {
-    background-color: rgb(69, 202, 73);
+    background-color: $secondary;
+    // background-color: rgb(69, 202, 73);
     cursor: pointer;
     border: 0;
     margin-right: 2px;
@@ -88,4 +89,8 @@
 
 .hidden {
     display: none;
+}
+
+.locked {
+    background-color: $other-2;
 }

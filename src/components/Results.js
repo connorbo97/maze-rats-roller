@@ -92,7 +92,7 @@ export const Results = ({ result, onAddSaved, onClickTag, onDeleteSaved }) => {
           shouldRender={prefixMatchShouldRenderFunc("ITEM_")}
         />
       </div>
-      {onAddSaved && (
+      {Object.keys(result).length && onAddSaved && (
         <button onClick={() => onAddSaved(result)}>Save Result</button>
       )}
       {onDeleteSaved && <button onClick={onDeleteSaved}>Delete Result</button>}
