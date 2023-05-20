@@ -52,7 +52,6 @@ const App = () => {
     const alertNote = prompt("Note about saved entry");
     setSaved((prev) => [{ note: alertNote, jsx: res }, ...prev]);
   };
-  console.log(tables, TABLES);
 
   return (
     <div className={styles["app"]}>
