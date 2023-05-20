@@ -14,8 +14,14 @@ const BaseProvider = ReduxContext.Provider;
 
 export const useRedux = () => useContext(ReduxContext);
 
+const SAVED_LOCAL_STORAGE_KEY = "MAZE_ROLLER_SAVED";
+let initialSave = [];
+try {
+  initialSave = JSON.parse(localStorage.getItem(SAVED_LOCAL_STORAGE_KEY)) || [];
+} catch (err) {}
 export const ReduxContextProvider: any = ({ children }) => {
-  const [saved, setSaved] = useState([]);
+  const [saved, setSaved] = useState(initialSave);
+  console.log(saved);
   const [rollAll, setRollAll] = useState(0);
   const [history, setHistory] = useState([]);
   const [tables, setTables] = useState([]);
@@ -52,6 +58,10 @@ export const ReduxContextProvider: any = ({ children }) => {
       setResult((old) => ({ ...old, [k]: value }));
     }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(SAVED_LOCAL_STORAGE_KEY, JSON.stringify(saved));
+  }, [saved]);
 
   useEffect(() => {
     setHistory((p) => {

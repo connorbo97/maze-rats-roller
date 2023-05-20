@@ -48,9 +48,9 @@ const App = () => {
       e.target.value = "";
     }
   };
-  const onAddSaved = (res) => {
+  const onAddSaved = (result) => {
     const alertNote = prompt("Note about saved entry");
-    setSaved((prev) => [{ note: alertNote, jsx: res }, ...prev]);
+    setSaved((prev) => [{ note: alertNote, result }, ...prev]);
   };
 
   return (
@@ -62,6 +62,16 @@ const App = () => {
             <>
               <button onClick={updateRollAll}>Roll All</button>
               <button onClick={() => updateTables([])}>Clear Tables</button>
+            </>
+          )}
+          {page === PAGES.SAVED && (
+            <>
+              <button onClick={() => setSaved([])}>Delete saved</button>
+            </>
+          )}
+          {page === PAGES.HISTORY && (
+            <>
+              <button onClick={() => setHistory([])}>Clear History</button>
             </>
           )}
           <button
@@ -114,7 +124,6 @@ const App = () => {
         </div>
         {page === PAGES.HISTORY && (
           <div>
-            <button onClick={() => setHistory([])}>Clear History</button>
             {history.map((h) =>
               Object.keys(h).length ? (
                 <>
@@ -135,18 +144,34 @@ const App = () => {
                 </>
               ) : null
             )}
+            {history.length === 0 && (
+              <span>Rolls from Roller page will be added here</span>
+            )}
           </div>
         )}
         {page === PAGES.SAVED && (
           <div className={styles["saved-container"]}>
-            {saved.map(({ note, jsx }) => {
+            {saved.map(({ note, result }, i) => {
               return (
-                <div>
-                  <div> {note}</div>
-                  {jsx}
+                <div key={i}>
+                  <u>
+                    <h2>{note}</h2>
+                  </u>
+                  <Results
+                    result={result}
+                    onClickTag={noop}
+                    onDeleteSaved={() =>
+                      setSaved((prev) => prev.filter((s, curI) => curI !== i))
+                    }
+                  />
                 </div>
               );
             })}
+            {saved.length === 0 && (
+              <span>
+                Click 'Save Result' on Roller/History page to add rolls here
+              </span>
+            )}
           </div>
         )}
         {page === PAGES.HOME && (

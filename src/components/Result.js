@@ -2,16 +2,20 @@ import React from "react";
 import styles from "./result.module.scss";
 import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLES } from "../constants";
 import { intersection } from "lodash";
+import { useRedux } from "../redux";
 
-const Tag = ({ val, label, table, onClick }) => {
+const Tag = ({ val, label, table, onClick, onDeleteTable }) => {
   if (!val) {
     return null;
   }
 
   return (
-    <span style={{ cursor: "pointer" }} onClick={() => onClick(table)}>
-      <b>{label}: </b>
-      {val}
+    <span className={styles["tag-container"]}>
+      <div className={styles["tag"]} onClick={() => onClick(table)}>
+        <b>{label}: </b>
+        <span>{val}</span>
+      </div>
+      <button onClick={onDeleteTable}>X</button>
     </span>
   );
 };
@@ -40,10 +44,10 @@ export const Result = ({
   label,
   onClickTag,
   tables,
-  onSave,
   renderBottomText = defaultRenderBottomText,
   shouldRender = defaultShouldRenderFunc,
 }) => {
+  const { updateTables, tables: reduxTables } = useRedux();
   if (!shouldRender(result, tables)) {
     return null;
   }
@@ -69,6 +73,9 @@ export const Result = ({
             val={formattedMap[t]}
             table={t}
             onClick={onClickTag}
+            onDeleteTable={() =>
+              updateTables(reduxTables.filter((v) => v !== t))
+            }
           />
         ))}
       </div>
@@ -76,10 +83,5 @@ export const Result = ({
     </div>
   );
 
-  return (
-    <div className={styles["save-container"]}>
-      {jsxResult}
-      <button onClick={() => onSave(jsxResult)}>SAVE</button>
-    </div>
-  );
+  return <div className={styles["save-container"]}>{jsxResult}</div>;
 };
