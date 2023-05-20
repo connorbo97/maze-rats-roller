@@ -1,22 +1,49 @@
 import React from "react";
 import styles from "./result.module.scss";
 import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLES } from "../constants";
-import { intersection } from "lodash";
+import { intersection, noop } from "lodash";
 import { useRedux } from "../redux";
 
-const Tag = ({ val, label, table, onClick, onDeleteTable }) => {
+const copyToClipboard = (text) => {
+  // Get the text field
+  // const copyText = document.createElement("input");
+  // copyText.value = text;
+
+  // console.log(copyText.value);
+  // // Select the text field
+  // copyText.select();
+  // copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(text);
+};
+
+const Cell = ({ val, label, onClick, onDeleteTable }) => {
   if (!val) {
     return null;
   }
 
   return (
-    <span className={styles["tag-container"]}>
-      <div className={styles["tag"]} onClick={() => onClick(table)}>
-        <b>{label}: </b>
-        <span>{val}</span>
+    <div className={styles["cell"]}>
+      <div className={styles["cell-header"]}>
+        <span>{label}</span>
+        <div className={styles["btn-container"]}>
+          {onClick && (
+            <button className={styles["roll-btn"]} onClick={onClick}>
+              &#9851;
+            </button>
+          )}
+          {onDeleteTable && (
+            <button className={styles["delete-btn"]} onClick={onDeleteTable}>
+              X
+            </button>
+          )}
+        </div>
       </div>
-      <button onClick={onDeleteTable}>X</button>
-    </span>
+      <div className={styles["cell-value"]} onClick={onClick || noop}>
+        {val}
+      </div>
+    </div>
   );
 };
 
@@ -27,15 +54,15 @@ export const partialShouldRenderFunc = (result, tables) =>
 export const prefixMatchShouldRenderFunc = (prefix) => (result, tables) =>
   Object.keys(result).find((v) => v.indexOf(prefix) === 0);
 const defaultShouldRenderFunc = partialShouldRenderFunc;
+const getDefaultRenderBottomText = (formattedMap, tables, separator = " || ") =>
+  tables
+    .map((t) => `${TABLES[t].label.split(": ")[1]}: ${formattedMap[t]}`)
+    .join(separator);
 const defaultRenderBottomText = (formattedMap, tables) => (
   <div>
     <br />
     <b>SUMMARY: </b>
-    <span>
-      {tables
-        .map((t) => `${TABLES[t].label.split(": ")[1]}: ${formattedMap[t]}`)
-        .join(" || ")}
-    </span>
+    <span>{getDefaultRenderBottomText(formattedMap, tables)}</span>
   </div>
 );
 
@@ -62,19 +89,30 @@ export const Result = ({
 
   const jsxResult = (
     <div className={styles["container"]}>
-      <div className={styles["monster"]}>
+      <div className={styles["header"]}>
         <b>
           <u>{label}</u>
         </b>
-        <br />
+
+        <button
+          onClick={() =>
+            copyToClipboard(
+              getDefaultRenderBottomText(formattedMap, tables, "\n")
+            )
+          }
+        >
+          Copy
+        </button>
+      </div>
+      <div className={styles["table"]}>
         {tables.map((t) => (
-          <Tag
+          <Cell
             label={TABLES[t].label.split(": ")[1]}
             val={formattedMap[t]}
-            table={t}
-            onClick={onClickTag}
-            onDeleteTable={() =>
-              updateTables(reduxTables.filter((v) => v !== t))
+            onClick={onClickTag && (() => onClickTag(t))}
+            onDeleteTable={
+              onClickTag &&
+              (() => updateTables(reduxTables.filter((v) => v !== t)))
             }
           />
         ))}

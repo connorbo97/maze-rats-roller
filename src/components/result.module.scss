@@ -1,10 +1,10 @@
-.monster {
-    flex: 1;
+@import '../colors';
+
+.header {
+    margin-bottom: 5px;
+    // font-size: 1.5rem;
     display: flex;
-    column-gap: 10px;
-    row-gap: 10px;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    column-gap: 5px;
 }
 
 .save-container {
@@ -14,6 +14,8 @@
 
 .container {
     width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted white;
 }
 .tag-container {
     display: flex;
@@ -27,4 +29,58 @@
     display: flex;
     cursor: pointer;
     flex-direction: column;
+}
+.table {
+    display: flex;
+    flex-wrap:wrap;
+}
+.cell {
+    display: flex;
+    flex-direction: column;
+    border-width: 1px 1px 1px 0px;
+    border-style: solid;
+    border-color: white;
+    width: 210px;
+
+    &:first-child {
+        border-width: 1px 1px 1px 1px;
+    }
+
+    > * {
+        padding: 2px;
+    }
+}
+.cell-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d7bba8;
+    color: $ctext;
+}
+.delete-btn {
+    background-color: rgb(202, 69, 69);
+    cursor: pointer;
+    border: 0;
+    color: white;
+}
+.roll-btn {
+    background-color: rgb(69, 202, 73);
+    cursor: pointer;
+    border: 0;
+    margin-right: 2px;
+    color: white;
+}
+.btn-container {
+    display: flex;
+    align-self: stretch;
+    > button {
+        width: 20px;
+        overflow:hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+.cell-value {
+    cursor: pointer;
 }

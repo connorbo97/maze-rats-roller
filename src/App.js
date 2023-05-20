@@ -8,7 +8,6 @@ import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
 import { Results } from "./components/Results";
-import { noop } from "lodash";
 
 const PAGES = {
   HOME: 0,
@@ -128,11 +127,7 @@ const App = () => {
               Object.keys(h).length ? (
                 <>
                   <div className={styles["result"]}>
-                    <Results
-                      result={h}
-                      onAddSaved={onAddSaved}
-                      onClickTag={noop}
-                    />
+                    <Results result={h} onAddSaved={onAddSaved} />
                   </div>
                   <div
                     style={{
@@ -159,7 +154,6 @@ const App = () => {
                   </u>
                   <Results
                     result={result}
-                    onClickTag={noop}
                     onDeleteSaved={() =>
                       setSaved((prev) => prev.filter((s, curI) => curI !== i))
                     }
