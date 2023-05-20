@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./result.module.scss";
 import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLES } from "../constants";
 import { intersection, noop } from "lodash";
 import { useRedux } from "../redux";
+import classnames from "classnames/bind";
+
+const classNameBuilder = classnames.bind(styles);
 
 const copyToClipboard = (text) => {
   // Get the text field
@@ -74,6 +77,7 @@ export const Result = ({
   renderBottomText = defaultRenderBottomText,
   shouldRender = defaultShouldRenderFunc,
 }) => {
+  const [hide, setHide] = useState(false);
   const { updateTables, tables: reduxTables } = useRedux();
   if (!shouldRender(result, tables)) {
     return null;
@@ -103,8 +107,11 @@ export const Result = ({
         >
           Copy
         </button>
+        <button onClick={() => setHide((h) => !h)}>
+          {hide ? "Show" : "Hide"}
+        </button>
       </div>
-      <div className={styles["table"]}>
+      <div className={classNameBuilder("table", { hidden: hide })}>
         {tables.map((t) => (
           <Cell
             label={TABLES[t].label.split(": ")[1]}
@@ -117,7 +124,7 @@ export const Result = ({
           />
         ))}
       </div>
-      {renderBottomText(formattedMap, tables, result)}
+      {!hide && renderBottomText(formattedMap, tables, result)}
     </div>
   );
 

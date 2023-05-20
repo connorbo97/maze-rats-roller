@@ -50,6 +50,7 @@ export const ReduxContextProvider: any = ({ children }) => {
   const updateResultByKey = useCallback((k, value) => {
     if (value === null) {
       setResult((old: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [k]: removed, newResult } = old;
 
         return newResult;
@@ -76,6 +77,7 @@ export const ReduxContextProvider: any = ({ children }) => {
       updateResultByKey,
       updateForceRollByTable,
       setSaved,
+      setResult,
       result,
       tables,
       tablesSet: new Set(tables),
@@ -86,6 +88,7 @@ export const ReduxContextProvider: any = ({ children }) => {
       setHistory,
     }),
     [
+      setResult,
       saved,
       setSaved,
       history,

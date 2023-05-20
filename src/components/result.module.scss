@@ -10,6 +10,7 @@
 .save-container {
     display: flex;
     align-items: stretch;
+    width: 100%;
 }
 
 .container {
@@ -54,8 +55,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #d7bba8;
-    color: $ctext;
+    background-color: $tertiary;
+    color: white;
 }
 .delete-btn {
     background-color: rgb(202, 69, 69);
@@ -83,4 +84,8 @@
 }
 .cell-value {
     cursor: pointer;
+}
+
+.hidden {
+    display: none;
 }

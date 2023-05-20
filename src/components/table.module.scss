@@ -15,11 +15,14 @@
         column-gap: 5px;
         > button {
             padding: 5px;
-            background-color: #d7bba8;
+            background-color: $secondary;
             color: $ctext;
             border: 0;
             border-radius: 5px;
             box-shadow: 5px 5px 1px 0px black;
+        }
+        > input {
+            width:50px;
         }
     }
 }
@@ -34,11 +37,11 @@
     }
     td {
         transition: all .2s ease-in-out;
-        &.selected-group {
-            border-color: orange;
-        }
+        // &.selected-group {
+        //     border-color: orange;
+        // }
         &.selected {
-            background-color: #58733e;
+            background-color: $other;
         }
     }
     th {
@@ -55,7 +58,8 @@
 }
 
 .locked.locked.locked {
-    background-color: gray;
+    background-color: $other-2;
+    color: $ctext;
 }
 
 .disabling.disabling.disabling  {

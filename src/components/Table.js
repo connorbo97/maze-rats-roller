@@ -29,9 +29,9 @@ export const Table = ({ table, tableName }) => {
     tables,
     forceRoll: forceRollObj,
   } = useRedux();
-  const forceRoll = forceRollObj[tableName];
-  const initialRollAll = useRef(rollAll);
-  const initialForceRoll = useRef(forceRollObj[tableName]);
+  const forceRoll = forceRollObj[tableName] || 0;
+  const rollAllRef = useRef(rollAll);
+  const forceRollRef = useRef(forceRoll);
   const [lock, setLock] = useState(false);
   const [disableMode, setDisableMode] = useState(false);
   const [disableValues, setDisableValues] = useState(false);
@@ -108,13 +108,12 @@ export const Table = ({ table, tableName }) => {
   };
 
   useEffect(() => {
-    if (
-      rollAll !== initialRollAll.current ||
-      forceRoll !== initialForceRoll.current
-    ) {
+    if (rollAll !== rollAllRef.current || forceRoll !== forceRollRef.current) {
       onRoll();
+      rollAllRef.current = rollAll;
+      forceRollRef.current = forceRoll;
     }
-  }, [rollAll, onRoll, forceRoll, initialForceRoll]);
+  }, [rollAll, onRoll, forceRoll, forceRollRef]);
 
   return (
     <div className={styles["container"]}>
@@ -128,7 +127,9 @@ export const Table = ({ table, tableName }) => {
         >
           {disableMode ? "Disable Mode" : "Select Mode"}
         </button>
-        <button onClick={() => setDisableValues({})}>Clear disable</button>
+        {Object.values(disableValues).some((v) => !!v) && (
+          <button onClick={() => setDisableValues({})}>Clear disabled</button>
+        )}
         <button
           onClick={() => setLock((l) => !l)}
           className={classNameBuilder({ locked: lock })}

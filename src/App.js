@@ -8,16 +8,14 @@ import { PRESETS, PRESET_LABELS } from "./constants/presets";
 import { useRedux } from "./redux";
 import { useState } from "react";
 import { Results } from "./components/Results";
+import classnames from "classnames/bind";
+
+const classNameBuilder = classnames.bind(styles);
 
 const PAGES = {
   HOME: 0,
   SAVED: 1,
   HISTORY: 2,
-};
-const PAGE_TO_NAME = {
-  [PAGES.HOME]: "Maze Rats Table Roller",
-  [PAGES.SAVED]: "Saved Rolls",
-  [PAGES.HISTORY]: "Historical Rolls",
 };
 
 const App = () => {
@@ -54,8 +52,28 @@ const App = () => {
 
   return (
     <div className={styles["app"]}>
+      <div className={styles["header"]}>
+        <button
+          className={classNameBuilder({ selected: page === PAGES.HOME })}
+          onClick={() => setPage(PAGES.HOME)}
+        >
+          Roller
+        </button>
+        <button
+          className={classNameBuilder({ selected: page === PAGES.SAVED })}
+          onClick={() => setPage(PAGES.SAVED)}
+        >
+          Saved
+        </button>
+        <button
+          className={classNameBuilder({ selected: page === PAGES.HISTORY })}
+          onClick={() => setPage(PAGES.HISTORY)}
+        >
+          History
+        </button>
+      </div>
       <div className={styles["content"]}>
-        <h1>{PAGE_TO_NAME[page]}</h1>
+        <h1>Maze Rats Roller</h1>
         <div className={styles["buttons"]}>
           {page === PAGES.HOME && (
             <>
@@ -73,11 +91,6 @@ const App = () => {
               <button onClick={() => setHistory([])}>Clear History</button>
             </>
           )}
-          <button
-            onClick={() => setPage((p) => (p + 1) % Object.keys(PAGES).length)}
-          >
-            Toggle page
-          </button>
           {page === PAGES.HOME && (
             <>
               <select name="presets" id="presets" onChange={onChangePreset}>
@@ -97,27 +110,29 @@ const App = () => {
                     </option>
                   ))}
               </select>
-              <select onChange={onAddTable}>
-                <option value="">Add a table</option>
-                {Object.keys(TABLE_NAMES)
-                  .filter(
-                    (table) =>
-                      !tablesSet.has(table) &&
-                      getTableLabel(table)
-                        .toLowerCase()
-                        .indexOf(tableFilter.toLowerCase()) !== -1
-                  )
-                  .map((table) => (
-                    <option key={table} value={table}>
-                      {getTableLabel(table)}
-                    </option>
-                  ))}
-              </select>
-              <input
-                value={tableFilter}
-                onChange={(e) => setTableFilter(e.target.value)}
-                placeholder="Table Filter"
-              />
+              <span className={styles["add-table-inputs"]}>
+                <select onChange={onAddTable}>
+                  <option value="">Add a table</option>
+                  {Object.keys(TABLE_NAMES)
+                    .filter(
+                      (table) =>
+                        !tablesSet.has(table) &&
+                        getTableLabel(table)
+                          .toLowerCase()
+                          .indexOf(tableFilter.toLowerCase()) !== -1
+                    )
+                    .map((table) => (
+                      <option key={table} value={table}>
+                        {getTableLabel(table)}
+                      </option>
+                    ))}
+                </select>
+                <input
+                  value={tableFilter}
+                  onChange={(e) => setTableFilter(e.target.value)}
+                  placeholder="Table Filter"
+                />
+              </span>
             </>
           )}
         </div>

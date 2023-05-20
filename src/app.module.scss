@@ -8,6 +8,31 @@
   color: $text;
 }
 
+input {
+  border-radius: 5px;
+  padding: 5px;
+}
+select {
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 5px 5px 1px 0px black;
+}
+.header {
+  display: flex;
+  column-gap: 5px;
+  > button {
+    flex: 1;
+    border: 0;
+    border-radius: 5px;
+    background-color: $secondary;
+
+    &.selected {
+      background-color: $tertiary;
+      color: white;
+    }
+  }
+}
+
 .content {
   padding: 10px;
   display: flex;
@@ -32,7 +57,7 @@
   > button {
     padding: 10px;
     min-width: 200px;
-    background-color: #d7bba8;
+    background-color: $secondary;
     color: $ctext;
     border: 0;
     border-radius: 5px;
@@ -82,4 +107,11 @@
     padding: 5px;
     border-bottom: 10px solid white;
   }
+}
+
+.add-table-inputs {
+  display: flex;
+  align-items: stretch;
+  column-gap: 5px;
+  align-self:stretch;
 }
