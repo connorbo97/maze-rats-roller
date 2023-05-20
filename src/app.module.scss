@@ -21,6 +21,8 @@ select {
   display: flex;
   column-gap: 5px;
   > button {
+    font-size: 15px;
+    padding: 5px;
     flex: 1;
     border: 0;
     border-radius: 5px;
@@ -97,6 +99,7 @@ select {
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+  width: 100%;
 }
 
 .saved-container {
