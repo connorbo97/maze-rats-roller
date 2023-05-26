@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./result.module.scss";
 import { CHARACTER_PROPERTY_TO_FLAVOR_TEXT, TABLES } from "../constants";
 import { intersection, noop } from "lodash";
@@ -90,7 +90,13 @@ export const Result = ({
 }) => {
   const [hide, setHide] = useState(false);
   const { updateTables, tables: reduxTables } = useRedux();
-  if (!shouldRender(result, tables)) {
+  const isRendered = shouldRender(result, tables);
+
+  useEffect(() => {
+    setHide(false);
+  }, [isRendered]);
+
+  if (!isRendered) {
     return null;
   }
 
