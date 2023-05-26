@@ -2,6 +2,7 @@ import React from "react";
 import {
   generateMagicText,
   renderCharacterBottomText,
+  renderInnBottomText,
   renderNPCBottomText,
   renderNameBottomText,
 } from "../descriptionUtils";
@@ -51,10 +52,25 @@ export const Results = ({ result, onAddSaved, onClickTag, onDeleteSaved }) => {
         />
         <Result
           result={result}
+          label={PRESET_LABELS.INN}
+          onClickTag={onClickTag}
+          tables={PRESETS.INN}
+          renderBottomText={renderInnBottomText}
+          shouldRender={prefixMatchShouldRenderFunc("INN_")}
+        />
+        <Result
+          result={result}
           label={PRESET_LABELS.CITY}
           onClickTag={onClickTag}
           tables={PRESETS.CITY}
           shouldRender={prefixMatchShouldRenderFunc("CITY_")}
+        />
+        <Result
+          result={result}
+          label={PRESET_LABELS.WILDERNESS}
+          onClickTag={onClickTag}
+          tables={PRESETS.WILDERNESS}
+          shouldRender={prefixMatchShouldRenderFunc("WILD_")}
         />
         <Result
           result={result}

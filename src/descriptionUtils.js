@@ -269,3 +269,24 @@ export const renderNameBottomText = (formattedMap, _, result) => {
     </div>
   );
 };
+
+export const renderInnBottomText = (formattedMap, _, result) => {
+  const tables = [TABLE_NAMES.INN_ADJECTIVES, TABLE_NAMES.INN_NOUNS];
+  const arr = tables.map((t) => formattedMap[t]).filter((v) => v);
+
+  return (
+    <div>
+      <br />
+      <div>{`The ${arr.join(" ")}`}</div>
+    </div>
+  );
+  // const perms = permutations(arr, 2);
+  // const allNames = perms.map((p) => p.join(" "));
+  // const text = allNames.join(" | ");
+  // return (
+  //   <div>
+  //     <br />
+  //     <div>{text}</div>
+  //   </div>
+  // );
+};
